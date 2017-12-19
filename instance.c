@@ -1,140 +1,148 @@
 #include "instance.h"
 
-/**
-  * Retourne un tableau d'instances initialisé créé sur le tas
-**/
-InstanceArray * InstanceArray_initAndCreate(){
-    InstanceArray * tmp = malloc(sizeof(InstanceArray));
+/** Retourne un tableau d'instances initialisé créé sur le tas
+ * @return un pointeur sur un tableau d'instances
+ */
+InstanceTableau * InstanceTableau_initCreer(){
+    InstanceTableau * tmp = malloc(sizeof(InstanceTableau));
     tmp->instances = NULL;
-    tmp->numberOfInstances = 0;
+    tmp->instancesNb = 0;
     return tmp;
 }
 
-/**
-  * Vide et détruit un tableau d'instances créé sur le tas
-**/
-void InstanceArray_finalizeAndDestroy(InstanceArray *instanceArray){
-    for(int i=0; i<instanceArray->numberOfInstances; i++){
-        free(instanceArray->instances[i].Bi);
-        free(instanceArray->instances[i].Pj);
-        free(instanceArray->instances[i].Xj);
-        for(int j=0; j<instanceArray->instances[i].dimensionNb; j++)
-            free(instanceArray->instances[i].Rij[j]);
-        free(instanceArray->instances[i].Rij);
+/** Vide et détruit un tableau d'instances créé sur le tas
+ * @param instanceTableau un pointeur sur une structure de type InstanceTableau
+ */
+void InstanceTableau_videDetruire(InstanceTableau *instanceTableau){
+    for(int i=0; i<instanceTableau->instancesNb; i++){
+        free(instanceTableau->instances[i].Bi);
+        free(instanceTableau->instances[i].Pj);
+        free(instanceTableau->instances[i].Xj);
+        for(int j=0; j<instanceTableau->instances[i].dimensionNb; j++)
+            free(instanceTableau->instances[i].Rij[j]);
+        free(instanceTableau->instances[i].Rij);
     }
-    free(instanceArray->instances);
-    free(instanceArray);
+    free(instanceTableau->instances);
+    free(instanceTableau);
 }
 
-/**
- *  Retourne un tableau d'instances créées sur le tas
- *  Préconditions : Ligne d'entrée non nulle
-**/
-void InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile){
-    char *line = NULL;
-    char *pEnd = line;
-
-    line = readLine(instanceFile);
-    pEnd = line;
-    instanceArray->numberOfInstances = (int)strtol(pEnd,&pEnd,10);
-    instanceArray->instances = (Instance*)malloc(sizeof(Instance)*instanceArray->numberOfInstances);
-    free(line);
-
-    //On saute une ligne du fichier
-    line=readLine(instanceFile);
-    free(line);
-
-    for(int i=0; i<instanceArray->numberOfInstances; i++){
-        Instance *currentInstance = &instanceArray->instances[i];
-
-        //On saute les deux lignes qui séparent chaque instance
-        for(int j=0; j<2; j++){
-            line=readLine(instanceFile);
-            free(line);
-        }
-
-        //On lit les informations de l'instance
-        line=readLine(instanceFile); //Ligne qui contient le nombre d’objet N, le nombre de dimension M, les valeurs connues de solutions trouvée
-        //Lecture des premiers paramètres de l'instance
-        pEnd = line;
-        for(int j=0; j<4; j++){
-            switch (j){
-            case 0:
-                currentInstance->objectNb = (int)strtol(pEnd,&pEnd,10);
-                break;
-            case 1:
-                currentInstance->dimensionNb = (int)strtol(pEnd,&pEnd,10);
-                break;
-            case 2:
-                currentInstance->sol1 = (int)strtol(pEnd,&pEnd,10);
-                break;
-            case 3:
-                currentInstance->sol2 = (int)strtol(pEnd,&pEnd,10);
-                break;
-            }
-        }
-        free(line);
-
-        //Lecture des variables Xj
-        line=readLine(instanceFile);
-        pEnd = line;
-        currentInstance->Xj = malloc(sizeof(int)*currentInstance->objectNb);
-        for(int j=0; j<currentInstance->objectNb; j++){
-            currentInstance->Xj[j] = (int)strtol(pEnd,&pEnd,10);
-        }
-        free(line);
-
-        //On saute une ligne
-        line=readLine(instanceFile);
-        free(line);
-
-        //Lecture des variables Pj
-        line=readLine(instanceFile);
-        pEnd = line;
-        currentInstance->Pj = malloc(sizeof(int)*currentInstance->objectNb);
-        for(int j=0; j<currentInstance->objectNb; j++){
-            currentInstance->Pj[j] = (int)strtol(pEnd,&pEnd,10);
-        }
-        free(line);
-
-        //On saute une ligne
-        line=readLine(instanceFile);
-        free(line);
-
-        //Lecture des poids Rij pour chaque dimension
-        currentInstance->Rij = (int**)malloc(sizeof(int*)*currentInstance->dimensionNb);
-        for(int k=0; k<currentInstance->dimensionNb; k++){
-            line=readLine(instanceFile);
-            pEnd = line;
-            currentInstance->Rij[k] = (int*)malloc(sizeof(int)*currentInstance->objectNb);
-            for(int j=0; j<currentInstance->objectNb; j++){
-                currentInstance->Rij[k][j] = (int)strtol(pEnd,&pEnd,10);
-            }
-            free(line);
-        }
-
-        //On saute une ligne
-        line=readLine(instanceFile);
-        free(line);
-
-        //Lecture des variables Bi
-        line=readLine(instanceFile);
-        pEnd = line;
-        currentInstance->Bi = (int*)malloc(sizeof(int)*currentInstance->dimensionNb);
-        for(int j=0; j<currentInstance->dimensionNb; j++){
-            currentInstance->Bi[j] = (int)strtol(pEnd,&pEnd,10);
-        }
-        free(line);
+/** Rempli un tableau d'instances en parsant un fichier
+ * @param instanceTableau un pointeur sur une structure de type InstanceTableau
+ * @param instanceFichier un pointeur sur un fichier contenant des informations sur les instances
+ * Préconditions : instanceTableau et instanceFichier non nuls
+ */
+void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *instanceFichier){
+    if(instanceTableau == NULL || instanceFichier == NULL){
+        printf("FATAL ERROR : FILE PARSE FAILED \n");
     }
-    printf("Fichier parsé avec succès\n");
+    else{
+        char *ligne = NULL;
+        char *pEnd = ligne;
+
+        ligne = lireLigne(instanceFichier);
+        pEnd = ligne;
+        instanceTableau->instancesNb = (int)strtol(pEnd,&pEnd,10);
+        instanceTableau->instances = (Instance*)malloc(sizeof(Instance)*instanceTableau->instancesNb);
+        free(ligne);
+
+        //On saute une ligne du fichier
+        ligne=lireLigne(instanceFichier);
+        free(ligne);
+
+        for(int i=0; i<instanceTableau->instancesNb; i++){
+            Instance *instanceCourante = &instanceTableau->instances[i];
+
+            //On saute les deux lignes qui séparent chaque instance
+            for(int j=0; j<2; j++){
+                ligne=lireLigne(instanceFichier);
+                free(ligne);
+            }
+
+            //On lit les informations de l'instance
+            ligne=lireLigne(instanceFichier); //Ligne qui contient le nombre d’objet N, le nombre de dimension M, les valeurs connues de solutions trouvée
+            //Lecture des premiers paramètres de l'instance
+            pEnd = ligne;
+            for(int j=0; j<4; j++){
+                switch (j){
+                case 0:
+                    instanceCourante->objetNb = (int)strtol(pEnd,&pEnd,10);
+                    break;
+                case 1:
+                    instanceCourante->dimensionNb = (int)strtol(pEnd,&pEnd,10);
+                    break;
+                case 2:
+                    instanceCourante->sol1 = (int)strtol(pEnd,&pEnd,10);
+                    break;
+                case 3:
+                    instanceCourante->sol2 = (int)strtol(pEnd,&pEnd,10);
+                    break;
+                }
+            }
+            free(ligne);
+
+            //Lecture des variables Xj
+            ligne=lireLigne(instanceFichier);
+            pEnd = ligne;
+            instanceCourante->Xj = malloc(sizeof(int)*instanceCourante->objetNb);
+            for(int j=0; j<instanceCourante->objetNb; j++){
+                instanceCourante->Xj[j] = (int)strtol(pEnd,&pEnd,10);
+            }
+            free(ligne);
+
+            //On saute une ligne
+            ligne=lireLigne(instanceFichier);
+            free(ligne);
+
+            //Lecture des variables Pj
+            ligne=lireLigne(instanceFichier);
+            pEnd = ligne;
+            instanceCourante->Pj = malloc(sizeof(int)*instanceCourante->objetNb);
+            for(int j=0; j<instanceCourante->objetNb; j++){
+                instanceCourante->Pj[j] = (int)strtol(pEnd,&pEnd,10);
+            }
+            free(ligne);
+
+            //On saute une ligne
+            ligne=lireLigne(instanceFichier);
+            free(ligne);
+
+            //Lecture des poids Rij pour chaque dimension
+            instanceCourante->Rij = (int**)malloc(sizeof(int*)*instanceCourante->dimensionNb);
+            for(int k=0; k<instanceCourante->dimensionNb; k++){
+                ligne=lireLigne(instanceFichier);
+                pEnd = ligne;
+                instanceCourante->Rij[k] = (int*)malloc(sizeof(int)*instanceCourante->objetNb);
+                for(int j=0; j<instanceCourante->objetNb; j++){
+                    instanceCourante->Rij[k][j] = (int)strtol(pEnd,&pEnd,10);
+                }
+                free(ligne);
+            }
+
+            //On saute une ligne
+            ligne=lireLigne(instanceFichier);
+            free(ligne);
+
+            //Lecture des variables Bi
+            ligne=lireLigne(instanceFichier);
+            pEnd = ligne;
+            instanceCourante->Bi = (int*)malloc(sizeof(int)*instanceCourante->dimensionNb);
+            for(int j=0; j<instanceCourante->dimensionNb; j++){
+                instanceCourante->Bi[j] = (int)strtol(pEnd,&pEnd,10);
+            }
+            free(ligne);
+        }
+        printf("Fichier parsé avec succès\n");
+    }
 }
 
-/** Lit une ligne d'un fichier
-**/
-char* readLine(FILE *file){
+/** Lit la ligne suivante d'un fichier
+ * @param fichier un pointeur sur un fichier texte
+ * @return une chaine de caractère allouée sur le tas contenant la ligne du fichier
+ */
+char* lireLigne(FILE *fichier){
     char *p = NULL;
-    char buf[1024];
-    if(fgets(buf,sizeof(buf),file) != NULL)
+    char buf[2048];
+    if(fgets(buf,sizeof(buf),fichier) != NULL)
         p = strdup(buf);
     return p;
 }

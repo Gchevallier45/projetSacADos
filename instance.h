@@ -9,7 +9,7 @@ typedef struct _Parameters{
 } Parameters;
 
 typedef struct _Instance{
-    int objectNb;
+    int objetNb;
     int dimensionNb;
     int sol1;
     int sol2;
@@ -19,16 +19,30 @@ typedef struct _Instance{
     int **Rij; //Pour chaque dimension la valeur des poids
 } Instance;
 
-typedef struct _InstanceArray{
+typedef struct _InstanceTableau{
     Instance *instances;
-    int numberOfInstances;
-} InstanceArray;
+    int instancesNb;
+} InstanceTableau;
 
+/** Retourne un tableau d'instances initialisé créé sur le tas
+ * @return un pointeur sur un tableau d'instances
+ */
+InstanceTableau * InstanceTableau_initCreer();
 
-InstanceArray * InstanceArray_initAndCreate();
+/** Vide et détruit un tableau d'instances créé sur le tas
+ * @param InstanceTableau un pointeur sur une structure de type InstanceTableau
+ */
+void InstanceTableau_videDetruire(InstanceTableau *InstanceTableau);
 
-void InstanceArray_finalizeAndDestroy(InstanceArray *instanceArray);
+/** Rempli un tableau d'instances en parsant un fichier
+ * @param InstanceTableau un pointeur sur une structure de type InstanceTableau
+ * @param instanceFile un pointeur sur un fichier contenant des informations sur les instances
+ * Préconditions : InstanceTableau et instanceFile non nuls
+ */
+void InstanceTableau_remplirInstances(InstanceTableau *InstanceTableau, FILE *instanceFile);
 
-void InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile);
-
-char* readLine(FILE *file);
+/** Lit la ligne suivante d'un fichier
+ * @param file un pointeur sur un fichier texte
+ * @return une chaine de caractère allouée sur le tas contenant la ligne du fichier
+ */
+char* lireLigne(FILE *file);
