@@ -6,6 +6,10 @@
 
 time_t timer;
 
+double elapsed = 0;
+double running = 0;
+
+
 void core(int argc, char *argv[]){
     Parameters p;
     p.filePath = argv[1];
