@@ -1,3 +1,3 @@
 # projetSacADos
 test
-yolo
+yolo11
