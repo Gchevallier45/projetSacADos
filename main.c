@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     timer = timer_start();
     core(argc,argv);
     //sleep(1);
-    printf("TIME : %lfs\n",timer_getTime(timer));
+    //printf("TIME : %lfs\n",timer_getTime(timer));
 
     /*for(int i=0; i<1000000;i++){
             for(int j=0; j<1000;j++){}

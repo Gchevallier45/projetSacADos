@@ -13,7 +13,10 @@ typedef struct _Instance{
     int dimensionNb;
     int sol1;
     int sol2;
-    int *objects;
+    int *Xj; //Les variables Xj des solutions trouvées
+    int *Pj; //La valeur des objets
+    int **Rij; //Pour chaque dimension la valeur des poids
+    int *Bi; //Poids à ne pas dépasser pour chaque dimension
 } Instance;
 
 typedef struct _InstanceArray{
@@ -22,6 +25,6 @@ typedef struct _InstanceArray{
 } InstanceArray;
 
 InstanceArray * InstanceArray_initAndCreate();
-InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile);
+void InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile);
 
 char* readLine(FILE *file);

@@ -13,13 +13,14 @@ InstanceArray * InstanceArray_initAndCreate(){
  *  Retourne un tableau d'instances créées sur le tas
  *  Préconditions : Ligne d'entrée non nulle
 **/
-InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile){
+void InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile){
 
     char *line = NULL;
-    char *pEnd = NULL;
+    char *pEnd = line;
 
     line = readLine(instanceFile);
-    instanceArray->numberOfInstances = (int)strtol(line,pEnd,10);
+    pEnd = line;
+    instanceArray->numberOfInstances = (int)strtol(pEnd,&pEnd,10);
     instanceArray->instances = (Instance*)malloc(sizeof(Instance)*instanceArray->numberOfInstances);
     free(line);
 
@@ -62,9 +63,9 @@ InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *
         //Lecture des variables Xj
         line=readLine(instanceFile);
         pEnd = line;
-        currentInstance.objects = malloc(sizeof(int)*currentInstance.objectNb);
+        currentInstance.Xj = malloc(sizeof(int)*currentInstance.objectNb);
         for(int j=0; j<currentInstance.objectNb; j++){
-            currentInstance.objects[i] = (int)strtol(pEnd,&pEnd,10);
+            currentInstance.Xj[j] = (int)strtol(pEnd,&pEnd,10);
         }
         free(line);
 
@@ -72,7 +73,48 @@ InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *
         line=readLine(instanceFile);
         free(line);
 
-        //
+        //Lecture des variables Pj
+        line=readLine(instanceFile);
+        pEnd = line;
+        currentInstance.Pj = malloc(sizeof(int)*currentInstance.objectNb);
+        for(int j=0; j<currentInstance.objectNb; j++){
+            currentInstance.Pj[j] = (int)strtol(pEnd,&pEnd,10);
+            //printf("%d<<",currentInstance.Pj[j]);
+        }
+        free(line);
+
+        //On saute une ligne
+        line=readLine(instanceFile);
+        free(line);
+
+        //Lecture des poids Rij pour chaque dimension
+        currentInstance.Rij = malloc(sizeof(int)*currentInstance.dimensionNb);
+        for(int k=0; k<currentInstance.dimensionNb; k++){
+            line=readLine(instanceFile);
+            pEnd = line;
+            currentInstance.Rij[k] = (int*)malloc(sizeof(int)*currentInstance.objectNb);
+            for(int j=0; j<currentInstance.objectNb; j++){
+                currentInstance.Rij[k][j] = (int)strtol(pEnd,&pEnd,10);
+                printf("%d\n",currentInstance.Rij[k][j]);
+            }
+            free(line);
+        }
+
+        //On saute une ligne
+        line=readLine(instanceFile);
+        free(line);
+
+        //Lecture des variables Pj
+        line=readLine(instanceFile);
+        pEnd = line;
+        currentInstance.Bi = malloc(sizeof(int)*currentInstance.dimensionNb);
+        for(int j=0; j<currentInstance.dimensionNb; j++){
+            currentInstance.Bi[j] = (int)strtol(pEnd,&pEnd,10);
+            printf("%d<<",currentInstance.Pj[j]);
+        }
+        free(line);
+
+
 
         //if(numberLine == 0){
             //char *pEnd;
@@ -82,7 +124,6 @@ InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *
         //free(line);
         i=30;
     }
-    return NULL;
 }
 
 /** Lit une ligne d'un fichier
