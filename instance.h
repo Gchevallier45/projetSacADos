@@ -15,6 +15,12 @@ typedef struct _Instance{
     int sol2;
 } Instance;
 
-Instance ** Instance_createInstances(Instance *instanceStructure[30], FILE *instanceFile);
+typedef struct _InstanceArray{
+    Instance *instances;
+    int numberOfInstances;
+} InstanceArray;
+
+InstanceArray * InstanceArray_initAndCreate();
+InstanceArray * InstanceArray_fillInstances(InstanceArray *instanceArray, FILE *instanceFile);
 
 char* readLine(FILE *file);

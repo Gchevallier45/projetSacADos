@@ -23,9 +23,10 @@ void core(int argc, char *argv[]){
     printf("%s\n",dest);
 
     FILE *file = fopen(dest,"r");
-    Instance *instances[30];
+    InstanceArray *instances = InstanceArray_initAndCreate();
+
     if(file != NULL){
-        Instance_createInstances(instances,file);
+        InstanceArray_fillInstances(instances,file);
         fclose(file);
     }
 }
