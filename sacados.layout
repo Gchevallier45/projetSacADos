@@ -2,31 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+	<File name="instance.c" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="402" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-<<<<<<< HEAD
-			<Cursor1 position="748" topLine="32" />
-=======
-			<Cursor1 position="343" topLine="0" />
->>>>>>> 909c106ff7251e9daa4a9a7d256ec0a577175458
+			<Cursor1 position="343" topLine="12" />
 		</Cursor>
 	</File>
-	<File name="instance.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="instance.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-<<<<<<< HEAD
-			<Cursor1 position="515" topLine="0" />
-=======
-			<Cursor1 position="58" topLine="0" />
->>>>>>> 909c106ff7251e9daa4a9a7d256ec0a577175458
-		</Cursor>
-	</File>
-	<File name="instance.h" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-<<<<<<< HEAD
-			<Cursor1 position="58" topLine="0" />
-=======
-			<Cursor1 position="240" topLine="0" />
->>>>>>> 909c106ff7251e9daa4a9a7d256ec0a577175458
+			<Cursor1 position="319" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

@@ -15,6 +15,6 @@ typedef struct _Instance{
     int sol2;
 } Instance;
 
-Instance * Instance_createInstance(FILE *instanceFile);
+Instance ** Instance_createInstance(FILE *instanceFile);
 
 char* readLine(FILE *file);
