@@ -23,12 +23,9 @@ void core(int argc, char *argv[]){
     printf("%s\n",dest);
 
     FILE *file = fopen(dest,"r");
-    readLine(file);
-    readLine(file);
-    readLine(file);
-    readLine(file);
+    Instance *instances[30];
     if(file != NULL){
-        Instance_createInstances(file);
+        Instance_createInstances(instances,file);
         fclose(file);
     }
 }
