@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "instance.h"
+#include "timer.h"
 
 
 

@@ -1,0 +1,6 @@
+#ifndef CODAGE_H_INCLUDED
+#define CODAGE_H_INCLUDED
+
+
+
+#endif // CODAGE_H_INCLUDED
