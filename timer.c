@@ -32,6 +32,8 @@ double timer_getTime(time_t timer){
 
     double timeElapsed;
     timeElapsed = (clock()-timer)/(double)CLOCKS_PER_SEC;
+
     timeFile(timeElapsed);
+
     return timeElapsed;
 }

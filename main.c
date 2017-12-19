@@ -32,19 +32,18 @@ void core(int argc, char *argv[]){
 
 int main(int argc, char *argv[])
 {
-    int a;
     time_t timer;
 
     timer = timer_start();
     core(argc,argv);
     //sleep(1);
-    printf("TIME : %fs\n",timer_getTime(timer));
+    printf("TIME : %lfs\n",timer_getTime(timer));
 
     /*for(int i=0; i<1000000;i++){
             for(int j=0; j<1000;j++){}
     }*/
 
-    printf("TIME : %fs\n",timer_getTime(timer));
+    printf("TIME : %lfs\n",timer_getTime(timer));
 
     //FILE *file = fopen(dest,"r");
 
