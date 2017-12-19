@@ -9,7 +9,7 @@
 
 
 void core(int argc, char *argv[]){
-    Parameters p;
+    /*Parameters p;
     p.filePath = argv[1];
     p.code = argv[2];
     p.method = argv[3];
@@ -21,15 +21,20 @@ void core(int argc, char *argv[]){
     char dest[1024];
     strcpy(dest,p.filePath);
     strcat(dest,"/_mknapcb1_res.txt");
-    printf("%s\n",dest);
+    printf("%s\n",dest);*/
 
-    FILE *file = fopen(dest,"r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     InstanceArray *instances = InstanceArray_initAndCreate();
 
     if(file != NULL){
         InstanceArray_fillInstances(instances,file);
         fclose(file);
     }
+    else{
+        printf("/!\\ FATAL ERROR : FILE NOT FOUND /!\\ \n");
+    }
+
+    InstanceArray_finalizeAndDestroy(instances);
 }
 
 int main(int argc, char *argv[])
