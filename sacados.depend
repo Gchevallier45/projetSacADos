@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1513328824 source:/home/etudiant/Documents/sacados/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"instance.h"
+
+1513329271 source:/home/etudiant/Documents/sacados/instance.c
+	"instance.h"
+
+1513326476 /home/etudiant/Documents/sacados/instance.h
+	<stdio.h>
+
+1513247772 source:/home/etudiant/Documents/sacados/instance.h
+
