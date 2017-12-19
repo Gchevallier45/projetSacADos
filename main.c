@@ -45,6 +45,7 @@ double timer_getTime(time_t timer){
 
 int main(int argc, char *argv[])
 {
+    int a;
     time_t timer;
 
     timer = timer_start();
