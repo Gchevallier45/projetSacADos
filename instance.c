@@ -5,18 +5,21 @@
     Préconditions : Ligne d'entrée non nulle
 **/
 
-Instance ** Instance_createInstance(FILE *instanceFile){
+Instance ** Instance_createInstances(FILE *instanceFile){
     Instance *instanceReturned[30];
     char *line;
     int numberLine = 0;
+    int instanceIndice = 0;
     while((line = readLine(instanceFile)) != NULL){
         //printf("%s",line);
+        instanceReturned[instanceIndice]=malloc(sizeof(Instance));
         if(numberLine == 0){
             char *pEnd;
-            instanceReturned->objectNb = (int)strtol(line,pEnd,10);
+            instanceReturned[instanceIndice]->objectNb = (int)strtol(line,pEnd,10);
             numberLine++;
         }
         free(line);
+        break;
     }
     return NULL;
 }

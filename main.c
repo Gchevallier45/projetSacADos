@@ -28,7 +28,7 @@ void core(int argc, char *argv[]){
     readLine(file);
     readLine(file);
     if(file != NULL){
-        Instance_createInstance(file);
+        Instance_createInstances(file);
         fclose(file);
     }
 }
