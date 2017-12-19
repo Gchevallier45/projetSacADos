@@ -4,10 +4,7 @@
 #include <time.h>
 #include "instance.h"
 
-time_t timer;
 
-double elapsed = 0;
-double running = 0;
 
 
 void core(int argc, char *argv[]){
@@ -36,11 +33,11 @@ void core(int argc, char *argv[]){
     }
 }
 
-void timer_start(){
-    timer = clock();
+time_t timer_start(){
+    return clock();
 }
 
-double timer_getTime(){
+double timer_getTime(time_t timer){
     double timeElapsed;
     timeElapsed = (clock()-timer)/(double)CLOCKS_PER_SEC;
     return timeElapsed;
@@ -48,16 +45,18 @@ double timer_getTime(){
 
 int main(int argc, char *argv[])
 {
-    timer_start();
+    time_t timer;
+
+    timer = timer_start();
     core(argc,argv);
     //sleep(1);
-    printf("TIME : %fs\n",timer_getTime());
+    printf("TIME : %fs\n",timer_getTime(timer));
 
     /*for(int i=0; i<1000000;i++){
             for(int j=0; j<1000;j++){}
     }*/
 
-    printf("TIME : %fs\n",timer_getTime());
+    printf("TIME : %fs\n",timer_getTime(timer));
 
     //FILE *file = fopen(dest,"r");
 
