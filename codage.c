@@ -12,7 +12,8 @@ typedef struct _codageDirect{
 
 int directResultat(int* tab, int* objet){
 
-
+    //prend en entrée le tableau de la struct et la liste des objets de l'instance
+    //permet de donner la valeur des objets du sac
 
     return 1;
 }
