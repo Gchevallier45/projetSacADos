@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     else{
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
-
+    printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
     InstanceTableau_videDetruire(instances);
 
     return 0;
