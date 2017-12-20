@@ -86,7 +86,7 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
             //Lecture des variables Xj
             ligne=lireLigne(instanceFichier);
             pEnd = ligne;
-            instanceCourante->Xj = malloc(sizeof(int)*instanceCourante->objetNb);
+            instanceCourante->Xj = (int*)malloc(sizeof(int)*instanceCourante->objetNb);
             for(int j=0; j<instanceCourante->objetNb; j++){
                 instanceCourante->Xj[j] = (int)strtol(pEnd,&pEnd,10);
             }
@@ -99,7 +99,7 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
             //Lecture des variables Pj
             ligne=lireLigne(instanceFichier);
             pEnd = ligne;
-            instanceCourante->Pj = malloc(sizeof(int)*instanceCourante->objetNb);
+            instanceCourante->Pj = (int*)malloc(sizeof(int)*instanceCourante->objetNb);
             for(int j=0; j<instanceCourante->objetNb; j++){
                 instanceCourante->Pj[j] = (int)strtol(pEnd,&pEnd,10);
             }
@@ -148,7 +148,7 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
  */
 char* lireLigne(FILE *fichier){
     char *p = NULL;
-    char buf[2048];
+    char buf[16384]; // Le buffer est suffisament grand pour parser un fichier ayant environ 2000 objets par instances
     if(fgets(buf,sizeof(buf),fichier) != NULL)
         p = strdup(buf);
     return p;

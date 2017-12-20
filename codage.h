@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "instance.h"
 
 typedef struct _Sac{
     int *objets;

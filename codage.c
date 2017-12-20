@@ -40,13 +40,15 @@ void writeSoluce(int solu){
 
 }
 
-Sac * decode(int *permutation, int nbPermutations){
+Sac * decode(int *permutation, int nbPermutations, Instance* instance){
     int i=0;
     Sac *sac = malloc(sizeof(Sac));
     sac->objetNb = 0;
     sac->objets = NULL;
 
-   /* while (i!=nbPermutations){
+    instance->objetNb;
+
+    /*while (i!=nbPermutations){
         int j = permutation[i];
         if j peut loger dans le sac then{
 
