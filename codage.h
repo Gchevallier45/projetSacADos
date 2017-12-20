@@ -11,4 +11,13 @@ typedef struct _Sac{
     int objetNb;
 } Sac;
 
+typedef struct _codageDirect{
+
+    int* sac;
+    int resultat;
+    int faisabilite;
+
+
+}codageDirect;
+
 #endif // CODAGE_H_INCLUDED

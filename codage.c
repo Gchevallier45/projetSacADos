@@ -1,22 +1,28 @@
 #include "codage.h"
 
 
-typedef struct _codageDirect{
+int directResultat(int* sac, int* objet, int nbObjets){
 
-    int* sac;
-    int resultat;
-    int faisabilite;
+    int i;
+    int resultat = 0;
 
+    for(i = 0; i < nbObjets; i++){
 
-}codageDirect;
+        resultat = resultat + sac[i] * objet[i];
 
-int directResultat(int* tab, int* objet){
+    }
 
     //prend en entrée le tableau de la struct et la liste des objets de l'instance
     //permet de donner la valeur des objets du sac
 
-    return 1;
+    return resultat;
 }
+
+
+/*  renvoie vrai ou faux si ce qui est dans le sac est une solution possible
+    à voir si on se base sur le résultat max de la valeur obtenable du set d'objets
+    ou si on compare des capacités et la somme des poids des objets du sac
+    dans ses différentes dimensions*/
 
 int directFaisable(int* tab){
 
