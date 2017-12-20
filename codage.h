@@ -6,4 +6,9 @@
 #include <string.h>
 #include <time.h>
 
+typedef struct _Sac{
+    int *objets;
+    int objetNb;
+} Sac;
+
 #endif // CODAGE_H_INCLUDED
