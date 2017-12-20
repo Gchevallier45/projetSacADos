@@ -58,6 +58,7 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
                 free(ligne);
             }
 
+
             //On lit les informations de l'instance
             ligne=lireLigne(instanceFichier); //Ligne qui contient le nombre d’objet N, le nombre de dimension M, les valeurs connues de solutions trouvée
             //Lecture des premiers paramètres de l'instance

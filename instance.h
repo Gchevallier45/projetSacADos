@@ -32,17 +32,17 @@ InstanceTableau * InstanceTableau_initCreer();
 /** Vide et détruit un tableau d'instances créé sur le tas
  * @param InstanceTableau un pointeur sur une structure de type InstanceTableau
  */
-void InstanceTableau_videDetruire(InstanceTableau *InstanceTableau);
+void InstanceTableau_videDetruire(InstanceTableau *instanceTableau);
 
 /** Rempli un tableau d'instances en parsant un fichier
  * @param InstanceTableau un pointeur sur une structure de type InstanceTableau
  * @param instanceFile un pointeur sur un fichier contenant des informations sur les instances
  * Préconditions : InstanceTableau et instanceFile non nuls
  */
-void InstanceTableau_remplirInstances(InstanceTableau *InstanceTableau, FILE *instanceFile);
+void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *instanceFichier);
 
 /** Lit la ligne suivante d'un fichier
  * @param file un pointeur sur un fichier texte
  * @return une chaine de caractère allouée sur le tas contenant la ligne du fichier
  */
-char* lireLigne(FILE *file);
+char* lireLigne(FILE *fichier);
