@@ -24,9 +24,13 @@ int directResultat(int* sac, int* valeur, int nbObjets){
     ou si on compare des capacités et la somme des poids des objets du sac
     dans ses différentes dimensions*/
 
-int directFaisable(int* tab){
+int directFaisable(int valeurSac, int valeurMax){
 
-    return 1;
+    if(valeurSac <= valeurMax)
+        return 1;
+    else
+        return 0;
+
 }
 
 

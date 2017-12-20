@@ -14,9 +14,9 @@ typedef struct _Sac{
 
 typedef struct _codageDirect{
 
-    int* sac;
-    int resultat;
-    int faisabilite;
+    int* sac;       //vecteur de booléens qui indique si un objet est mis dans le sac ou non
+    int resultat;   //somme des valeurs
+    int faisabilite;//
 
 
 }codageDirect;
