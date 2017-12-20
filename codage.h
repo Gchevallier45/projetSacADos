@@ -6,4 +6,16 @@
 #include <string.h>
 #include <time.h>
 
+
+
+typedef struct _codageDirect{
+
+    int* sac;
+    int resultat;
+    int faisabilite;
+
+
+}codageDirect;
+
+
 #endif // CODAGE_H_INCLUDED
