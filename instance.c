@@ -50,6 +50,8 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
         free(ligne);
 
         for(int i=0; i<instanceTableau->instancesNb; i++){
+            time_t timer;
+            timer = timer_start();
             Instance *instanceCourante = &instanceTableau->instances[i];
 
             //On saute les deux lignes qui séparent chaque instance
@@ -131,6 +133,10 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
                 instanceCourante->Bi[j] = (int)strtol(pEnd,&pEnd,10);
             }
             free(ligne);
+
+            double time = timer_getTime(timer);
+            printf("TIME : %lfs\n",time);
+            timeFile(time,i+1);
         }
         printf("Fichier parsé avec succès\n");
     }

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 
-void timeFile(double temps);
+void timeFile(double temps, int noInstance);
 time_t timer_start();
 double timer_getTime(time_t timer);
 

@@ -7,8 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-    time_t timer;
-    timer = timer_start();
     //core(argc,argv);
 
     /*Parameters p;
@@ -37,9 +35,6 @@ int main(int argc, char *argv[])
     }
 
     InstanceTableau_videDetruire(instances);
-
-
-    printf("TIME : %lfs\n",timer_getTime(timer));
 
     return 0;
 }

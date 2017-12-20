@@ -1,16 +1,16 @@
 #include "timer.h"
 
-void timeFile(double temps){
+void timeFile(double temps, int noInstance){
 
-    static int nbInstance = 0;
+    //static int nbInstance = 0;
     FILE* sortie = NULL;
 
-    if(nbInstance != 0){
+    if(noInstance != 1){
         sortie = fopen("sortie.txt","a");
-        nbInstance++;
+        //nbInstance++;
     }else {
         sortie = fopen("sortie.txt","w+");
-        nbInstance = 1;
+        //nbInstance = 1;
     }
 
     if(sortie == NULL){
@@ -18,7 +18,7 @@ void timeFile(double temps){
         exit(0);
     }
 
-    fprintf(sortie,"Temps Instance %d : %lf s\n", nbInstance, temps);
+    fprintf(sortie,"Temps Instance %d : %lf s\n", noInstance, temps);
 
     fclose(sortie);
 
@@ -32,8 +32,8 @@ double timer_getTime(time_t timer){
 
     double timeElapsed;
     timeElapsed = (clock()-timer)/(double)CLOCKS_PER_SEC;
-
-    timeFile(timeElapsed);
+    //printf("time elapsed : %d %d %f\n",clock(),timer,timeElapsed);
+    //timeFile(timeElapsed,1);
 
     return timeElapsed;
 }
