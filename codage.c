@@ -1,14 +1,14 @@
 #include "codage.h"
 
 
-int directResultat(int* sac, int* objet, int nbObjets){
+int directResultat(int* sac, int* valeur, int nbObjets){
 
     int i;
     int resultat = 0;
 
     for(i = 0; i < nbObjets; i++){
 
-        resultat = resultat + sac[i] * objet[i];
+        resultat = resultat + sac[i] * valeur[i];
 
     }
 
@@ -46,7 +46,7 @@ Sac * decode(int *permutation, int nbPermutations){
     sac->objetNb = 0;
     sac->objets = NULL;
 
-    while (i!=nbPermutations){
+   /* while (i!=nbPermutations){
         int j = permutation[i];
         if j peut loger dans le sac then{
 
@@ -55,7 +55,7 @@ Sac * decode(int *permutation, int nbPermutations){
         end
         i ← i +1
         end
-    }
+    }*/
 
     return sac;
 }
