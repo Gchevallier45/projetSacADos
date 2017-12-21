@@ -7,10 +7,10 @@
 #include <time.h>
 #include "instance.h"
 
-typedef struct _Solution{
+/*typedef struct _Solution{
     int *objets;
     int objetNb;
-} Solution;
+} Solution;*/
 
 typedef struct _codageDirect{
 
@@ -21,8 +21,8 @@ typedef struct _codageDirect{
 
 }codageDirect;
 
-Solution * Solution_initCreer();
-Solution * Solution_videDetruire(Solution *solution);
+/*Solution * Solution_initCreer();
+Solution * Solution_videDetruire(Solution *solution);*/
 
 
 int directResultat(int* sac, int* valeur, int nbObjets);
