@@ -36,12 +36,14 @@ int directFaisable(int valeurSac, int valeurMax){
 
 void affSoluce(int solu){
 
-
+    printf("la valeur de la solution est : %d", solu);
 }
 
 void writeSoluce(int solu){
 
+    FILE * fichier;
 
+    fopen("sortie.txt","a");
 }
 
 Sac * decode(int *permutation, int nbPermutations, Instance* instance){
