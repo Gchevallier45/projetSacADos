@@ -14,11 +14,11 @@ void timeFile(double temps, int noInstance){
     }
 
     if(sortie == NULL){
-        printf("Problème pour écrire dans sortie.txt");
+        printf("Problème pour écrire le temps dans sortie.txt");
         exit(0);
     }
 
-    fprintf(sortie,"Temps Instance %d : %lf s\n", noInstance, temps);
+    fprintf(sortie,"%d | %lf |", noInstance, temps);
 
     fclose(sortie);
 

@@ -24,17 +24,18 @@ int main(int argc, char *argv[])
     printf("%s\n",dest);*/
 
     FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
-    InstanceTableau *instances = InstanceTableau_initCreer();
+    InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
-        InstanceTableau_remplirInstances(instances,file);
+        InstanceTableau_remplirInstances(grInstances,file);
         fclose(file);
     }
     else{
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
-    printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
-    InstanceTableau_videDetruire(instances);
+    //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
+    affSoluce(grInstances->instances->sol1);
+    InstanceTableau_videDetruire(grInstances);
 
     return 0;
 }
