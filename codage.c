@@ -40,9 +40,18 @@ void affSoluce(int solu){
 
 void writeSoluce(int solu){
 
-    FILE * fichier;
+    FILE * fichier = NULL;
 
-    fopen("sortie.txt","a");
+    fichier = fopen("sortie.txt","a");
+
+    if(fichier == NULL){
+        printf("Problème pour écrire la valeur dans sortie.txt");
+        exit(0);
+    }
+
+    fprintf(fichier," %d\n",solu);
+
+    fclose(fichier);
 }
 
 int decode(int *permutation, int nbPermutations, Instance* instance){
