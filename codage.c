@@ -1,14 +1,13 @@
 #include "codage.h"
 
-
-int directResultat(int* sac, int* valeur, int nbObjets){
+int directResultat(int* solutionBinaire, int* valeur, int nbObjets){
 
     int i;
     int resultat = 0;
 
     for(i = 0; i < nbObjets; i++){
 
-        resultat = resultat + sac[i] * valeur[i];
+        resultat = resultat + solutionBinaire[i] * valeur[i];
 
     }
 
@@ -46,11 +45,11 @@ void writeSoluce(int solu){
     fopen("sortie.txt","a");
 }
 
-Sac * decode(int *permutation, int nbPermutations, Instance* instance){
+int decode(int *permutation, int nbPermutations, Instance* instance){
     int i=0;
-    Sac *sac = malloc(sizeof(Sac));
-    sac->objetNb = 0;
-    sac->objets = NULL;
+    //int *sac = malloc(sizeof(Solution));
+    //sac->objetNb = 0;
+    //sac->objets = NULL;
 
     instance->objetNb;
 
@@ -65,6 +64,6 @@ Sac * decode(int *permutation, int nbPermutations, Instance* instance){
         end
     }*/
 
-    return sac;
+    return 0;
 }
 
