@@ -8,5 +8,5 @@ ListeObjets * ListeObjets_initCreer(){
 }
 
 ListeObjets * ListeObjets_videDetruire(ListeObjets * listeObjets){
-
+    //for(int i=0;i<listeObjets->objet)
 }

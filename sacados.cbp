@@ -37,6 +37,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="codage.h" />
+		<Unit filename="heuristique.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="heuristique.h" />
 		<Unit filename="instance.c">
 			<Option compilerVar="CC" />
 		</Unit>
