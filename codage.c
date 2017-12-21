@@ -1,14 +1,25 @@
 #include "codage.h"
 
+Solution * Solution_initCreer(){
+    Solution * tmp = malloc(sizeof(Solution));
+    tmp->objets = NULL;
+    tmp->objetNb = 0;
+    return tmp;
+}
 
-int directResultat(int* sac, int* valeur, int nbObjets){
+Solution * Solution_videDetruire(Solution *solution){
+    free(objets);
+    free(solution);
+}
+
+Solution * directResultat(int* solutionBinaire, int* valeur, int nbObjets){
 
     int i;
-    int resultat = 0;
+    Solution * resultat = 0;
 
     for(i = 0; i < nbObjets; i++){
 
-        resultat = resultat + sac[i] * valeur[i];
+        resultat = resultat + solutionBinaire[i] * valeur[i];
 
     }
 
@@ -44,9 +55,9 @@ void writeSoluce(int solu){
 
 }
 
-Sac * decode(int *permutation, int nbPermutations, Instance* instance){
+Solution * decode(int *permutation, int nbPermutations, Instance* instance){
     int i=0;
-    Sac *sac = malloc(sizeof(Sac));
+    Solution *sac = malloc(sizeof(Solution));
     sac->objetNb = 0;
     sac->objets = NULL;
 
