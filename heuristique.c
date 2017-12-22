@@ -7,6 +7,12 @@ ListeObjets * ListeObjets_initCreer(){
     return tmp;
 }
 
-ListeObjets * ListeObjets_videDetruire(ListeObjets * listeObjets){
-    //for(int i=0;i<listeObjets->objet)
+void ListeObjets_videDetruire(ListeObjets * listeObjets){
+    ListeObjets *tmp = listeObjets;
+    while(tmp != NULL){
+        free(tmp);
+        tmp = tmp->suivant;
+    }
+    free(listeObjets);
 }
+

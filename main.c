@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 #include "instance.h"
 #include "timer.h"
+#include "codage.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +20,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb9_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -34,8 +31,8 @@ int main(int argc, char *argv[])
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
     //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
-    affSoluce(grInstances->instances->sol1);
-    writeSoluce(grInstances->instances->sol1);
+    affSoluce(grInstances->instances[0].sol1);
+    writeSoluce(grInstances->instances[0].sol1);
     InstanceTableau_videDetruire(grInstances);
 
     return 0;
