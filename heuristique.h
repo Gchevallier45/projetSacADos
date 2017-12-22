@@ -2,10 +2,12 @@
 #define HEURISTIQUE_H_INCLUDED
 
 #include <stdlib.h>
-
+#include <time.h>
+#include "instance.h"
+//liste chainée d'oobjets
 typedef struct _ListeObjets{
-    int objet;
-    struct _ListeObjets *suivant;
+    int objet;          //Numero de l'objet
+    struct _ListeObjets *suivant;   //Objet suivant
 } ListeObjets;
 
 ListeObjets * ListeObjets_initCreer();

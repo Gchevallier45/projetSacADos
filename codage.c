@@ -49,7 +49,7 @@ void writeSoluce(int solu){
         exit(0);
     }
 
-    fprintf(fichier,"yoloooooooooooooooooooooooooooooooo %d\n",solu);
+    fprintf(fichier," %d\n",solu);
 
     fclose(fichier);
 }
