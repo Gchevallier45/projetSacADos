@@ -32,13 +32,20 @@ int main(int argc, char *argv[])
     }
     //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
 
-    int *solution=calloc(grInstances->instances[0].objetNb,sizeof(int));//malloc(sizeof(int)*instance.objetNb);
     int *tabAlea = (int*)malloc((grInstances->instances[0].objetNb) * sizeof(int));
 
     randPick(tabAlea,grInstances->instances[0]);
+    for(int x=0;x<10;x++){
+    time_t time1000 = timer_start();
+    for(int i=0; i<1000000; i++){
+    int *solution=calloc(grInstances->instances[0].objetNb,sizeof(int));//malloc(sizeof(int)*instance.objetNb);
+
     decode(tabAlea,grInstances->instances[0].objetNb,solution,grInstances->instances[0]);
-    free(tabAlea);
     free(solution);
+    }
+    printf("TOTAL TIME : %f \n",timer_getTime(time1000));
+    }
+    free(tabAlea);
     affSoluce(grInstances->instances[0].sol1);
     writeSoluce(grInstances->instances[0].sol1);
     InstanceTableau_videDetruire(grInstances);
