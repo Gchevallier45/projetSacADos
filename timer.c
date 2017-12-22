@@ -1,5 +1,7 @@
 #include "timer.h"
 
+//srand(time(NULL));
+
 void timeFile(double temps, int noInstance){
 
     //static int nbInstance = 0;
