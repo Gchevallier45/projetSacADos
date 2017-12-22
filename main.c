@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
     }
     //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
     affSoluce(grInstances->instances->sol1);
+    writeSoluce(grInstances->instances->sol1);
     InstanceTableau_videDetruire(grInstances);
 
     return 0;

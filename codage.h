@@ -26,6 +26,8 @@ Solution * Solution_videDetruire(Solution *solution);*/
 
 
 int directResultat(int* sac, int* valeur, int nbObjets);
+void writeSoluce(int solu);
+void affSoluce(int solu);
 
 
 #endif // CODAGE_H_INCLUDED
