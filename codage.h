@@ -27,4 +27,5 @@ Solution * Solution_videDetruire(Solution *solution);*/
 
 int directResultat(int* sac, int* valeur, int nbObjets);
 
+
 #endif // CODAGE_H_INCLUDED
