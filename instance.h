@@ -1,3 +1,6 @@
+#ifndef INSTANCE_H_INCLUDED
+#define INSTANCE_H_INCLUDED
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,3 +50,5 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
  * @return une chaine de caractère allouée sur le tas contenant la ligne du fichier
  */
 char* lireLigne(FILE *fichier);
+
+#endif // INSTANCE_H_INCLUDED
