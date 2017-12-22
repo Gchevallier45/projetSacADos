@@ -23,6 +23,7 @@ void retraitElemTab(int ** tabElem, int tabTaille, int elem){
 
     for(int i = indiceElem; i<tabTaille-1; i++){
         (*tabElem)[i] = (*tabElem)[i+1];
+
     }
 
     *tabElem = realloc(*tabElem, sizeof(int)*(tabTaille-1));
