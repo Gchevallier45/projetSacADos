@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb9_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
     //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
+    //printf("R00 instance 0 : %d",grInstances->instances[0].Rij[4][0]);
+    int *result = (int*)decode(NULL,0,grInstances->instances[0]);
+    //free(result);
     affSoluce(grInstances->instances[0].sol1);
     writeSoluce(grInstances->instances[0].sol1);
     InstanceTableau_videDetruire(grInstances);
