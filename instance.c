@@ -135,7 +135,7 @@ void InstanceTableau_remplirInstances(InstanceTableau *instanceTableau, FILE *in
             free(ligne);
 
             double time = timer_getTime(timer);
-            printf("TIME : %lfs\n",time);
+            //printf("TIME : %lfs\n",time);
             timeFile(time,i+1);
         }
         printf("Fichier parsé avec succès\n");
