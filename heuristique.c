@@ -19,7 +19,59 @@ void ListeObjets_videDetruire(ListeObjets * listeObjets){
         free(tmp);
         tmp = tmp->suivant;
     }
-    free(listeObjets);
+    //free(listeObjets);
+}
+
+/** Insère un objet à la suite de la liste
+ * @param listeObjets un pointeur sur une structure de type ListeObjets
+ * @param numeroObjet le numero de l'objet à ajouter et à insérer dans la liste
+ */
+void ListeObjets_insererObjet(ListeObjets ** listeObjets, ListeObjets * objet){
+    if(*listeObjets == NULL){
+        *listeObjets = objet;
+    }
+    else{
+        ListeObjets *current = *listeObjets;
+        while(current->suivant != NULL)
+            current = current->suivant;
+
+        current->suivant = objet;
+    }
+}
+
+/** Supprime un objet de la liste
+ * @param listeObjets un pointeur sur une structure de type ListeObjets
+ * @param objet l'objet à supprimer de la liste
+ */
+void ListeObjets_supprimerObjet(ListeObjets ** listeObjets, ListeObjets * objet) {
+    ListeObjets *before = *listeObjets;
+
+    while(before != NULL && before->suivant != objet)
+        before = before->suivant;
+
+    if(before != NULL){
+        before->suivant=objet->suivant;
+    }
+    else{
+        *listeObjets = objet->suivant;
+    }
+}
+
+/** Obtenir l'objet à l'indice
+ * @param list the pointer on the first cell of the list
+ * @param rowIndex the index of the requested row
+ * @return a pointer on the rowIndex-th row of the list or NULL if the list contains less rows than the requested one
+ */
+ListeObjets * ListeObjets_obtenirObjet(ListeObjets * listeObjets, int objetIndex) {
+    if(objetIndex < 0)
+        return NULL;
+    int i=0;
+    ListeObjets *res = listeObjets;
+    while(i<objetIndex && res!=NULL){
+        ++i;
+        res=res->suivant;
+    }
+    return res;
 }
 
 /** Supprime un élément d'un tableau
@@ -30,11 +82,21 @@ void ListeObjets_videDetruire(ListeObjets * listeObjets){
  */
 void retraitElemTab(int ** tabElem, int tabTaille, int elem){
     int indiceElem=0;
-    while((*tabElem)[indiceElem]!=elem)
+    /*while((*tabElem)[indiceElem]!=elem)
         indiceElem++;
 
     for(int i = indiceElem; i<tabTaille-1; i++){
         (*tabElem)[i] = (*tabElem)[i+1];
+    }*/
+
+    int *tmpElem = *tabElem;
+    while(*tmpElem!=elem)
+        tmpElem++;
+
+    int i=tmpElem-*tabElem;
+    for(i; i<tabTaille-1; i++){
+        *tmpElem = *(tmpElem+1);
+        tmpElem++;
     }
 
     *tabElem = realloc(*tabElem, sizeof(int)*(tabTaille-1));
@@ -58,3 +120,40 @@ void randPick(int* tabAlea, Instance instance){
         retraitElemTab(&intermediaire,instance.objetNb-(i),tabAlea[i]);
     }
 }
+
+void Indirect_aleat(int* tabAlea, Instance instance){
+    srand(time(NULL));
+
+    ListeObjets *liste = ListeObjets_initCreer();
+    ListeObjets *current = liste;
+
+    for(int i=0; i < instance.objetNb; i++){
+        ListeObjets *tmp = ListeObjets_initCreer();
+        tmp->objet = i;
+        tmp->suivant = NULL;
+        ListeObjets_insererObjet(&current,tmp);
+        current = tmp;
+    }
+
+    current = liste;
+    int lastRand = 0;
+    for(int i=0; i < instance.objetNb; i++){
+        int randNb = rand() % (instance.objetNb - (i));
+        if(randNb>=lastRand){
+            ListeObjets *insert = ListeObjets_obtenirObjet(current,randNb-lastRand);
+            tabAlea[i] = insert->objet;
+            ListeObjets_supprimerObjet(&current,insert);
+            current = insert->suivant;
+        }
+        else{
+            ListeObjets *insert = ListeObjets_obtenirObjet(liste,randNb);
+            tabAlea[i] = insert->objet;
+            ListeObjets_supprimerObjet(&liste,insert);
+            current = insert->suivant;
+        }
+        lastRand = randNb;
+    }
+
+    ListeObjets_videDetruire(liste);
+}
+

@@ -99,13 +99,13 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance instan
             solution[*permutation] = 1;
         }
 
-        /*printf("\n");
+        printf("\n");
         printf("Solution 0 : %d, Max poids dim : %d\n", sommePoids[0], instance.Bi[0]);
         printf("Solution 1 : %d, Max poids dim : %d\n", sommePoids[1], instance.Bi[1]);
         printf("Solution 2 : %d, Max poids dim : %d\n", sommePoids[2], instance.Bi[2]);
         printf("Solution 3 : %d, Max poids dim : %d\n", sommePoids[3], instance.Bi[3]);
         printf("Solution 4 : %d, Max poids dim : %d\n", sommePoids[4], instance.Bi[4]);
-        printf("---------------------------------------------");*/
+        printf("---------------------------------------------");
         permutation++;
     }
     free(sommePoids);
