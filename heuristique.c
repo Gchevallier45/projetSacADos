@@ -102,7 +102,7 @@ void retraitElemTab(int ** tabElem, int tabTaille, int elem){
     *tabElem = realloc(*tabElem, sizeof(int)*(tabTaille-1));
 }
 
-/** Construit une permutation d'objets
+/** Heuristique aléatoire indirecte (version tableau)
  * @param tabAlea le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
  * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
@@ -121,6 +121,11 @@ void randPick(int* tabAlea, Instance instance){
     }
 }
 
+/** Heuristique aléatoire indirecte
+ * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
 void Indirect_aleat(int* tabAlea, Instance instance){
     srand(time(NULL));
 
@@ -157,3 +162,14 @@ void Indirect_aleat(int* tabAlea, Instance instance){
     ListeObjets_videDetruire(liste);
 }
 
+/** Heuristique aléatoire directe
+ * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void Direct_aleat(int* tabAlea, Instance instance){
+    int *solutionInd = (int*)malloc((instance.objetNb) * sizeof(int));
+    Indirect_aleat(solutionInd, instance);
+    decode(solutionInd,instance.objetNb,tabAlea,instance);
+    free(solutionInd);
+}

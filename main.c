@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     int *tabAlea = (int*)malloc((grInstances->instances[0].objetNb) * sizeof(int));
 
     //randPick(tabAlea,grInstances->instances[0]);
-    Indirect_aleat(tabAlea,grInstances->instances[0]);
+    Direct_aleat(tabAlea,grInstances->instances[0]);
     free(tabAlea);
     }
 
