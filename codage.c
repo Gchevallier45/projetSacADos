@@ -31,9 +31,12 @@ int directFaisable(int valeurSac, int valeurMax){
 }
 
 
-void affSoluce(int solu){
-
-    printf("la valeur de la solution est : %d", solu);
+void affSoluce(int* solutionBinaire, int nbObjets){
+    printf("|");
+    for(int i=0;i<nbObjets;i++)
+        printf("%d|",solutionBinaire[i]);
+    printf("\n");
+    //printf("la valeur de la solution est : %d", solu);
 }
 
 void writeSoluce(int solu){

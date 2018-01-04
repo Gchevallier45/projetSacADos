@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+    //srand(time(NULL));
     //core(argc,argv);
 
     /*Parameters p;
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb3_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -35,11 +36,13 @@ int main(int argc, char *argv[])
 
     for(int y=0;y<10;y++){
     time_t time1000 = timer_start();
-    for(int x=0;x<1000;x++){
+    for(int x=0;x<10;x++){
     int *tabAlea = (int*)malloc((grInstances->instances[0].objetNb) * sizeof(int));
 
     //randPick(tabAlea,grInstances->instances[0]);
-    Direct_aleat(tabAlea,grInstances->instances[0]);
+    Indirect_aleat(tabAlea,grInstances->instances[0]);
+    affSoluce(tabAlea,grInstances->instances[0].objetNb);
+    //printf("%d\n",directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb));
     free(tabAlea);
     }
 
