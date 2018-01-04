@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    //srand(time(NULL));
+    srand(time(NULL));
     //core(argc,argv);
 
     /*Parameters p;
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb7_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -34,20 +34,25 @@ int main(int argc, char *argv[])
     }
     //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
 
+    int solutionMoyenne = 0;
+
     for(int y=0;y<10;y++){
     time_t time1000 = timer_start();
-    for(int x=0;x<10;x++){
+    for(int x=0;x<1000;x++){
     int *tabAlea = (int*)malloc((grInstances->instances[0].objetNb) * sizeof(int));
 
     //randPick(tabAlea,grInstances->instances[0]);
-    Indirect_aleat(tabAlea,grInstances->instances[0]);
-    affSoluce(tabAlea,grInstances->instances[0].objetNb);
-    //printf("%d\n",directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb));
+    Direct_aleat(tabAlea,grInstances->instances[0]);
+
+    solutionMoyenne += directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb);
+    //printf("FOUND : %d (MAX POSSIBLE : %d)\n",directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb),grInstances->instances[0].sol1);
     free(tabAlea);
     }
 
     printf("TOTAL TIME : %f \n",timer_getTime(time1000));
     }
+    printf("--------------------------------------------------------\n");
+    printf("Solution moyenne : %d, soit %.4f%% de la meilleure solution\n",solutionMoyenne/10000,(float)(solutionMoyenne/10000)/grInstances->instances[0].sol1);
 
     /*for(int x=0;x<10;x++){
     time_t time1000 = timer_start();

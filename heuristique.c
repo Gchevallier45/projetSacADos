@@ -131,8 +131,8 @@ void Indirect_aleat(int* tabAlea, Instance instance){
     for(int i=0;i<instance.objetNb;i++)
         tabAlea[i] = 0;
 
-    randPick(tabAlea, instance);
-    //decode(solutionInd,instance.objetNb,tabAlea,instance);
+    randPick(solutionInd, instance);
+    decode(solutionInd,instance.objetNb,tabAlea,instance);
     free(solutionInd);
 
     /*ListeObjets *liste = ListeObjets_initCreer();
@@ -202,12 +202,8 @@ void Direct_aleat(int* tabAlea, Instance instance){
             tabAlea[*solutionInd] = 1;
         }
 
-        solutionInd++;
+        solutionInd++; //Equivaut à supprimer le premier élément du tableau
     }
     free(sommePoids);
     free(solutionIndFirst);
-    /*int *solutionInd = (int*)malloc((instance.objetNb) * sizeof(int));
-    Indirect_aleat(solutionInd, instance);
-    decode(solutionInd,instance.objetNb,tabAlea,instance);
-    free(solutionInd);*/
 }
