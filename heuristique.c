@@ -119,19 +119,74 @@ void randPick(int* tabAlea, Instance instance){
     }
 }
 
-/** Heuristique aléatoire indirecte
+/** Remplit un tableau avec une permutation d'objets de valeur décroissante
  * @param tabAlea le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
  * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void Indirect_aleat(int* tabAlea, Instance instance){
+void decValPick(int* tabAlea, Instance instance){
+    //int * intermediaire = (int*)malloc( (instance.objetNb) * sizeof(int));
+    int * valeurs = (int*)malloc( (instance.objetNb) * sizeof(int));
+    memcpy(valeurs, instance.Pj, instance.objetNb*sizeof(int));
+
+    for(int i=0; i < instance.objetNb; i++){
+        tabAlea[i] = i;
+    }
+
+    /*for(int i=0; i < instance.objetNb; i++){
+        tabAlea[i] = intermediaire[rand() % (instance.objetNb - (i))];
+        retraitElemTab(&intermediaire,instance.objetNb-(i),tabAlea[i]);
+    }*/
+
+    //Tri à bulle
+    int enOrdre = 0;
+    int taille = instance.objetNb;
+    while(enOrdre == 0)
+    {
+        enOrdre = 1;
+        for(int i=0 ; i < taille-1 ; i++)
+        {
+            if(valeurs[i] < valeurs[i+1])
+            {
+                int tmpVal = valeurs[i];
+                valeurs[i] = valeurs[i+1];
+                valeurs[i+1] = tmpVal;
+                tmpVal = tabAlea[i];
+                tabAlea[i] = tabAlea[i+1];
+                tabAlea[i+1] = tmpVal;
+                enOrdre = 0;
+            }
+        }
+        taille--;
+    }
+
+    //affSoluce(valeurs,instance.objetNb);
+
+    free(valeurs);
+}
+
+/** Heuristique indirecte
+ * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void Indirect(int* tabAlea, Instance instance, int typeOrdonnancement){
 
     int * solutionInd = (int*)malloc( (instance.objetNb) * sizeof(int));
 
     for(int i=0;i<instance.objetNb;i++)
         tabAlea[i] = 0;
 
-    randPick(solutionInd, instance);
+    switch(typeOrdonnancement){
+    case 1:
+        randPick(solutionInd, instance);
+        break;
+    case 2:
+        decValPick(solutionInd, instance);
+        break;
+    }
+    //randPick(solutionInd, instance);
+    //decValPick(solutionInd, instance);
     decode(solutionInd,instance.objetNb,tabAlea,instance);
     free(solutionInd);
 
@@ -168,12 +223,12 @@ void Indirect_aleat(int* tabAlea, Instance instance){
     ListeObjets_videDetruire(liste);*/
 }
 
-/** Heuristique aléatoire directe
+/** Heuristique directe
  * @param tabAlea le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
  * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void Direct_aleat(int* tabAlea, Instance instance){
+void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
     int * solutionInd = (int*)malloc( (instance.objetNb) * sizeof(int));
     int * solutionIndFirst = solutionInd;
     int *sommePoids = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
@@ -181,7 +236,14 @@ void Direct_aleat(int* tabAlea, Instance instance){
     for(int i=0;i<instance.objetNb;i++)
         tabAlea[i] = 0;
 
-    randPick(solutionInd, instance);
+    switch(typeOrdonnancement){
+    case 1:
+        randPick(solutionInd, instance);
+        break;
+    case 2:
+        decValPick(solutionInd, instance);
+        break;
+    }
 
     for(int i=0;i<instance.objetNb;i++){
         int resultTest = 0;
