@@ -303,4 +303,5 @@ void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
     }
     free(sommePoids);
     free(solutionIndFirst);
+    free(etatDimensions);
 }
