@@ -134,31 +134,42 @@ void decRatioValPoidsPick(int* tabAlea, Instance instance){
  * @param instance l'instance à utiliser pour générer la permutation
  * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void decRatioValPoidsCritPick(int* tabAlea, Instance instance){
-    double * ratios = (double*)malloc( (instance.objetNb) * sizeof(double));
+void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance, int *etatDimensions){
+    double * ratios = (double*)malloc( (tailleTabAlea) * sizeof(double));
     int dimensionCritique = 0;
 
-    int poidsMin = instance.Bi[0];
-    for(int i=1; i < instance.dimensionNb; i++){
-        if(instance.Bi[i] < poidsMin){
-            poidsMin = instance.Bi[i];
-            dimensionCritique = i;
+    if(etatDimensions == NULL){
+        int poidsMin = instance.Bi[0];
+        for(int i=1; i < instance.dimensionNb; i++){
+            if(instance.Bi[i] < poidsMin){
+                poidsMin = instance.Bi[i];
+                dimensionCritique = i;
+            }
+        }
+
+        for(int i=0; i < tailleTabAlea; i++){
+            tabAlea[i] = i;
+        }
+    }
+    else{
+        int poidsMin = etatDimensions[0];
+        for(int i=1; i < instance.dimensionNb; i++){
+            if(etatDimensions[i] < poidsMin){
+                poidsMin = etatDimensions[i];
+                dimensionCritique = i;
+            }
         }
     }
 
-    printf("dim crit :%d \n",dimensionCritique);
+    //printf(" dim crit :%d \n",dimensionCritique);
 
-    for(int i=0; i < instance.objetNb; i++){
+    for(int i=0; i < tailleTabAlea; i++){
         ratios[i] = instance.Pj[i]/(double)instance.Rij[dimensionCritique][i];
-    }
-
-    for(int i=0; i < instance.objetNb; i++){
-        tabAlea[i] = i;
     }
 
     //Tri à bulle
     int enOrdre = 0;
-    int taille = instance.objetNb;
+    int taille = tailleTabAlea;
     while(enOrdre == 0)
     {
         enOrdre = 1;
@@ -204,7 +215,7 @@ void Indirect(int* tabAlea, Instance instance, int typeOrdonnancement){
         decRatioValPoidsPick(solutionInd, instance);
         break;
     case 4:
-        decRatioValPoidsCritPick(solutionInd, instance);
+        decRatioValPoidsCritPick(solutionInd, instance.objetNb, instance, NULL);
         break;
     case 5:
         //Stratégie d'ordonnancement à développer
@@ -224,6 +235,7 @@ void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
     int * solutionInd = (int*)malloc( (instance.objetNb) * sizeof(int));
     int * solutionIndFirst = solutionInd;
     int *sommePoids = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
+    int *etatDimensions = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
 
     for(int i=0;i<instance.objetNb;i++)
         tabAlea[i] = 0;
@@ -239,13 +251,15 @@ void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
         decRatioValPoidsPick(solutionInd, instance);
         break;
     case 4:
-        decRatioValPoidsCritPick(solutionInd, instance);
+        decRatioValPoidsCritPick(solutionInd, instance.objetNb, instance, NULL);
         break;
     case 5:
         //Stratégie d'ordonnancement à développer
         break;
     case 6: //Ratio valeur/poids mis à jour
-        decRatioValPoidsCritPick(solutionInd, instance);
+        decRatioValPoidsCritPick(solutionInd, instance.objetNb, instance, NULL);
+        for(int i=0;i<instance.dimensionNb;i++)
+            etatDimensions[i] = instance.Bi[i];
         break;
     }
 
@@ -266,9 +280,26 @@ void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
                 sommePoids[j]+=instance.Rij[j][*solutionInd];
             }
             tabAlea[*solutionInd] = 1;
+
+            if(typeOrdonnancement == 6){
+                for(int i=0;i<instance.dimensionNb;i++){
+                    etatDimensions[i] -= instance.Rij[i][*solutionInd];
+                    //printf("%d ",etatDimensions[i]);
+                }
+            }
         }
 
         solutionInd++; //Equivaut à supprimer le premier élément du tableau
+
+        if(typeOrdonnancement == 6){
+            decRatioValPoidsCritPick(solutionInd, instance.objetNb-i-1, instance, etatDimensions);
+            /*for(int j=0; j < instance.objetNb-i-1; j++){
+                printf(" %d|",solutionInd[j]);
+            }
+            printf("\n\n");*/
+            //printf("après : %d \n",*solutionInd);
+        }
+
     }
     free(sommePoids);
     free(solutionIndFirst);

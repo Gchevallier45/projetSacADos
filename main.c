@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb9_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -32,40 +32,24 @@ int main(int argc, char *argv[])
     else{
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
-    //printf("SOLUTION : %d \n",directResultat(instances->instances[0].Xj,instances->instances[0].Pj,instances->instances[0].objetNb));
 
-    unsigned long long solutionMoyenne = 0;
-
-    for(int y=0;y<10;y++){
-    time_t time1000 = timer_start();
-    for(int x=0;x<100;x++){
-    int *tabAlea = (int*)malloc((grInstances->instances[0].objetNb) * sizeof(int));
-
-    Indirect(tabAlea,grInstances->instances[0],4);
-
-    solutionMoyenne += directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb);
-    //printf("FOUND : %d (MAX POSSIBLE : %d)\n",directResultat(tabAlea,grInstances->instances[0].Pj,grInstances->instances[0].objetNb),grInstances->instances[0].sol1);
-    //printf("%lld",solutionMoyenne);
-    free(tabAlea);
-    }
-
-    printf("TOTAL TIME : %f \n",timer_getTime(time1000));
-    }
-    printf("--------------------------------------------------------------------\n");
-    printf("Solution moyenne : %d, soit %.2f%% de la meilleure solution %d\n",solutionMoyenne/1000,((float)(solutionMoyenne/1000)/grInstances->instances[0].sol1)*100,grInstances->instances[0].sol1);
-
-    /*for(int x=0;x<10;x++){
-    time_t time1000 = timer_start();
-    for(int i=0; i<1000000; i++){
-    int *solution=calloc(grInstances->instances[0].objetNb,sizeof(int));//malloc(sizeof(int)*instance.objetNb);
-
-    decode(tabAlea,grInstances->instances[0].objetNb,solution,grInstances->instances[0]);
-    free(solution);
+    double moyennePourcentage = 0;
+    printf("INSTANCE | TEMPS CALCUL | %% SOLUTION | SOLUTION | SOLUTION MAX \n");
+    for(int i=0; i<grInstances->instancesNb; i++){
+        time_t time1000 = timer_start();
+        printf("   %.2d    |",i+1);
+        int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
+        Direct(tabAlea,grInstances->instances[i],3);
+        printf("   %f   |",timer_getTime(time1000));
+        int resultat = directResultat(tabAlea,grInstances->instances[i].Pj,grInstances->instances[i].objetNb);
+        printf("   %.2f%%   |",100*(resultat/(double)grInstances->instances[i].sol1));//,resultat,grInstances->instances[i].sol1);
+        printf("  %d   |",resultat);
+        printf("   %d     \n",grInstances->instances[i].sol1);
         free(tabAlea);
+        moyennePourcentage += 100*(resultat/(double)grInstances->instances[i].sol1);
     }
-    printf("TOTAL TIME : %f \n",timer_getTime(time1000));
-    }
-    affSoluce(grInstances->instances[0].sol1);
+    printf("\n              | QUALITE SOLUTIONS --> %.2f%% |\n\n",moyennePourcentage/grInstances->instancesNb);
+    /*affSoluce(grInstances->instances[0].sol1);
     writeSoluce(grInstances->instances[0].sol1);*/
     InstanceTableau_videDetruire(grInstances);
 
