@@ -1,50 +1,47 @@
 #include "codage.h"
 
-int directResultat(int* solutionBinaire, int* valeur, int nbObjets){
-
-    int i;
+/** Affiche la valeur d'une solution directe
+ * @param solutionBinaire un tableau de int contenant la solution directe
+ * @param instance l'instance correspondant à la solution
+ * @return la valeur de la solution
+ */
+int directResultat(int* solutionBinaire, Instance *instance){
+    int* valeur = instance->Pj;
     int resultat = 0;
 
-    for(i = 0; i < nbObjets; i++){
+    for(int i = 0; i < instance->objetNb; i++){
         resultat = resultat + *solutionBinaire * *valeur;
         solutionBinaire++;
         valeur++;
     }
 
-    //prend en entrée le tableau de la struct et la liste des objets de l'instance
-    //permet de donner la valeur des objets du sac
-
     return resultat;
 }
 
-
-/*  renvoie vrai ou faux si ce qui est dans le sac est une solution possible
-    à voir si on se base sur le résultat max de la valeur obtenable du set d'objets
-    ou si on compare des capacités et la somme des poids des objets du sac
-    dans ses différentes dimensions*/
-
+/** Renvoie 1 si la solution est faisable, 0 sinon
+ * @param
+ * @param
+ */
 int directFaisable(int valeurSac, int valeurMax){
-
-    if(valeurSac <= valeurMax)
-        return 1;
-    else
-        return 0;
-
+    return(valeurSac <= valeurMax);
 }
 
-
-void affSoluce(int* solutionBinaire, int nbObjets){
+/** Affiche une solution
+ * @param solution un tableau de int contenant une solution
+ * @param nbObjets la taille du tableau de la solution
+ */
+void affSoluce(int* solution, int nbObjets){
     printf("|");
     for(int i=0;i<nbObjets;i++)
-        printf("%d|",solutionBinaire[i]);
+        printf("%d|",solution[i]);
     printf("\n");
-    //printf("la valeur de la solution est : %d", solu);
 }
 
+/** Ecrit une solution dans un fichier de sortir
+ * @param solu la valeur de la solution à écrire
+ */
 void writeSoluce(int solu){
-
     FILE * fichier = NULL;
-
     fichier = fopen("sortie.txt","a");
 
     if(fichier == NULL){
@@ -53,19 +50,24 @@ void writeSoluce(int solu){
     }
 
     fprintf(fichier," %d\n",solu);
-
     fclose(fichier);
 }
 
+/** Décode une solution indirecte en solution directe
+ * @param permutation un tableau de int contenant une permutation d'objets
+ * @param nbPermutations la taille du tableau de permutations
+ * @param solution le tableau dans lequel stocker la solution directe
+ * @param instance l'instance correspondant à la permutation
+ */
 void decode(int *permutation, int nbPermutations, int *solution, Instance *instance){
     int dimensionNb = instance->dimensionNb;
     int *sommePoids = calloc(dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
     int *endpermut = permutation + nbPermutations;
 
     while(permutation < endpermut){
-        int resultTest = 0;
+        /*int resultTest = 0;
 
-        /*for(int j=0; j<dimensionNb; j++){
+        for(int j=0; j<dimensionNb; j++){
             if(sommePoids[j]+instance->Rij[j][*permutation-1] < instance->Bi[j]){
                 resultTest++;
             }
@@ -85,7 +87,6 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance *insta
         for(j=0; j<dimensionNb; j++){
             sommePoids[j]+=instance->Rij[j][*permutation-1];
             if(sommePoids[j] > instance->Bi[j]){
-                //printf("loool");
                 for(int k=0; k<=j; k++){
                     sommePoids[k]-=instance->Rij[k][*permutation-1];
                 }

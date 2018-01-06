@@ -7,27 +7,36 @@
 #include <time.h>
 #include "instance.h"
 
-/*typedef struct _Solution{
-    int *objets;
-    int objetNb;
-} Solution;*/
+/** Affiche la valeur d'une solution directe
+ * @param solutionBinaire un tableau de int contenant la solution directe
+ * @param instance l'instance correspondant à la solution
+ * @return la valeur de la solution
+ */
+int directResultat(int *solutionBinaire, Instance *instance);
 
-typedef struct _codageDirect{
+/** Renvoie 1 si la solution est faisable, 0 sinon
+ * @param
+ * @param
+ */
+int directFaisable(int valeurSac, int valeurMax);
 
-    int* sac;       //vecteur de booléens qui indique si un objet est mis dans le sac ou non
-    int resultat;   //somme des valeurs
-    int faisabilite;//
+/** Affiche une solution
+ * @param solution un tableau de int contenant une solution
+ * @param nbObjets la taille du tableau de la solution
+ */
+void affSoluce(int* solution, int nbObjets);
 
-
-}codageDirect;
-
-/*Solution * Solution_initCreer();
-Solution * Solution_videDetruire(Solution *solution);*/
-
-
-int directResultat(int* sac, int* valeur, int nbObjets);
+/** Ecrit une solution dans un fichier de sortir
+ * @param solu la valeur de la solution à écrire
+ */
 void writeSoluce(int solu);
-void affSoluce(int* solutionBinaire, int nbObjets);
 
+/** Décode une solution indirecte en solution directe
+ * @param permutation un tableau de int contenant une permutation d'objets
+ * @param nbPermutations la taille du tableau de permutations
+ * @param solution le tableau dans lequel stocker la solution directe
+ * @param instance l'instance correspondant à la permutation
+ */
+void decode(int *permutation, int nbPermutations, int *solution, Instance *instance);
 
 #endif // CODAGE_H_INCLUDED

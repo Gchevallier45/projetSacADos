@@ -6,12 +6,16 @@
 #include <string.h>
 #include "timer.h"
 
+/** Structure qui stocke les paramètres lors de l'appel du programme
+ */
 typedef struct _Parameters{
     char* filePath;
     char* code;
     char* method;
 } Parameters;
 
+/** Structure qui stocke les données d'une instance d'un problème
+ */
 typedef struct _Instance{
     int objetNb;
     int dimensionNb;
@@ -23,6 +27,8 @@ typedef struct _Instance{
     int **Rij; //Pour chaque dimension la valeur des poids
 } Instance;
 
+/** Structure qui stocke un tableau d'instances
+ */
 typedef struct _InstanceTableau{
     Instance *instances;
     int instancesNb;

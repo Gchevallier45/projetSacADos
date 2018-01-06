@@ -13,12 +13,47 @@
  */
 void retraitElemTab(int ** tabElem, int tabTaille, int elem);
 
-/** Construit une permutation d'objets
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+/** Remplit un tableau avec une permutation d'objets aléatoire
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void randPick(int* tabAlea, Instance instance);
+void randPick(int* tabAlea, Instance *instance);
+
+/** Remplit un tableau avec une permutation d'objets de valeur décroissante
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void decValPick(int* tab, Instance *instance);
+
+/** Remplit un tableau avec une permutation d'objets avec un ratio valeur/sommedespoids décroissant
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void decRatioValPoidsPick(int* tab, Instance *instance);
+
+/** Remplit un tableau avec une permutation d'objets avec un ratio valeur/sommedespoids sur la dimension critique décroissant
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void decRatioValPoidsCritPick(int* tab, int tailleTab, Instance *instance, int *etatDimensions);
+
+/** Heuristique indirecte
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void Indirect(int* tab, Instance *instance, int typeOrdonnancement);
+
+/** Heuristique directe
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void Direct(int* tab, Instance *instance, int typeOrdonnancement);
 
 
 
