@@ -36,7 +36,7 @@ void retraitElemTab(int ** tabElem, int tabTaille, int elem){
 void randPick(int* tab, Instance instance){
     int * intermediaire = (int*)malloc( (instance.objetNb) * sizeof(int));
     for(int i=0; i < instance.objetNb; i++){
-        intermediaire[i] = i;
+        intermediaire[i] = i+1;
     }
 
     for(int i=0; i < instance.objetNb; i++){
@@ -56,7 +56,7 @@ void decValPick(int* tab, Instance instance){
     memcpy(valeurs, instance.Pj, instance.objetNb*sizeof(int));
 
     for(int i=0; i < instance.objetNb; i++){
-        tab[i] = i;
+        tab[i] = i+1;
     }
 
     //Tri à bulle
@@ -101,7 +101,7 @@ void decRatioValPoidsPick(int* tab, Instance instance){
     }
 
     for(int i=0; i < instance.objetNb; i++){
-        tab[i] = i;
+        tab[i] = i+1;
     }
 
     //Tri à bulle
@@ -148,7 +148,7 @@ void decRatioValPoidsCritPick(int* tab, int tailleTab, Instance instance, int *e
         }
 
         for(int i=0; i < tailleTab; i++){
-            tab[i] = i;
+            tab[i] = i+1;
         }
     }
     else{
@@ -223,6 +223,8 @@ void Indirect(int* tab, Instance instance, int typeOrdonnancement){
     }
 
     decode(solutionInd,instance.objetNb,tab,instance);
+    //affSoluce(solutionInd,instance.objetNb);
+    //affSoluce(tab,instance.objetNb);
     free(solutionInd);
 }
 
@@ -267,7 +269,7 @@ void Direct(int* tab, Instance instance, int typeOrdonnancement){
         int resultTest = 0;
 
         for(int j=0; j<instance.dimensionNb; j++){
-            if(sommePoids[j]+instance.Rij[j][*solutionInd] < instance.Bi[j]){
+            if(sommePoids[j]+instance.Rij[j][*solutionInd-1] < instance.Bi[j]){
                 resultTest++;
             }
             else{
@@ -277,13 +279,13 @@ void Direct(int* tab, Instance instance, int typeOrdonnancement){
 
         if(resultTest == instance.dimensionNb){
             for(int j=0; j<instance.dimensionNb; j++){
-                sommePoids[j]+=instance.Rij[j][*solutionInd];
+                sommePoids[j]+=instance.Rij[j][*solutionInd-1];
             }
-            tab[*solutionInd] = 1;
+            tab[*solutionInd-1] = 1;
 
             if(typeOrdonnancement == 6){
                 for(int i=0;i<instance.dimensionNb;i++){
-                    etatDimensions[i] -= instance.Rij[i][*solutionInd];
+                    etatDimensions[i] -= instance.Rij[i][*solutionInd-1];
                     //printf("%d ",etatDimensions[i]);
                 }
             }
@@ -304,4 +306,5 @@ void Direct(int* tab, Instance instance, int typeOrdonnancement){
     free(sommePoids);
     free(solutionIndFirst);
     free(etatDimensions);
+        //affSoluce(tab,instance.objetNb);
 }

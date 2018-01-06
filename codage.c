@@ -63,7 +63,7 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance instan
         int resultTest = 0;
 
         for(int j=0; j<instance.dimensionNb; j++){
-            if(sommePoids[j]+instance.Rij[j][*permutation] < instance.Bi[j]){
+            if(sommePoids[j]+instance.Rij[j][*permutation-1] < instance.Bi[j]){
                 resultTest++;
             }
             else{
@@ -73,9 +73,9 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance instan
 
         if(resultTest == instance.dimensionNb){
             for(int j=0; j<instance.dimensionNb; j++){
-                sommePoids[j]+=instance.Rij[j][*permutation];
+                sommePoids[j]+=instance.Rij[j][*permutation-1];
             }
-            solution[*permutation] = 1;
+            solution[*permutation-1] = 1;
         }
 
         /*printf("\n");
