@@ -48,6 +48,12 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="metaheuristique.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="metaheuristique.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="timer.c">
 			<Option compilerVar="CC" />
 		</Unit>

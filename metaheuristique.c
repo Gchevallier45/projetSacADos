@@ -1,1 +1,1 @@
-
+//void metaLocal(int* objets

@@ -29,34 +29,34 @@ void retraitElemTab(int ** tabElem, int tabTaille, int elem){
 }
 
 /** Remplit un tableau avec une permutation d'objets aléatoire
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void randPick(int* tabAlea, Instance instance){
+void randPick(int* tab, Instance instance){
     int * intermediaire = (int*)malloc( (instance.objetNb) * sizeof(int));
     for(int i=0; i < instance.objetNb; i++){
         intermediaire[i] = i;
     }
 
     for(int i=0; i < instance.objetNb; i++){
-        tabAlea[i] = intermediaire[rand() % (instance.objetNb - (i))];
-        retraitElemTab(&intermediaire,instance.objetNb-(i),tabAlea[i]);
+        tab[i] = intermediaire[rand() % (instance.objetNb - (i))];
+        retraitElemTab(&intermediaire,instance.objetNb-(i),tab[i]);
     }
     free(intermediaire);
 }
 
 /** Remplit un tableau avec une permutation d'objets de valeur décroissante
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void decValPick(int* tabAlea, Instance instance){
+void decValPick(int* tab, Instance instance){
     int * valeurs = (int*)malloc( (instance.objetNb) * sizeof(int));
     memcpy(valeurs, instance.Pj, instance.objetNb*sizeof(int));
 
     for(int i=0; i < instance.objetNb; i++){
-        tabAlea[i] = i;
+        tab[i] = i;
     }
 
     //Tri à bulle
@@ -72,9 +72,9 @@ void decValPick(int* tabAlea, Instance instance){
                 int tmpVal = valeurs[i];
                 valeurs[i] = valeurs[i+1];
                 valeurs[i+1] = tmpVal;
-                tmpVal = tabAlea[i];
-                tabAlea[i] = tabAlea[i+1];
-                tabAlea[i+1] = tmpVal;
+                tmpVal = tab[i];
+                tab[i] = tab[i+1];
+                tab[i+1] = tmpVal;
                 enOrdre = 0;
             }
         }
@@ -85,11 +85,11 @@ void decValPick(int* tabAlea, Instance instance){
 }
 
 /** Remplit un tableau avec une permutation d'objets avec un ratio valeur/sommedespoids décroissant
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void decRatioValPoidsPick(int* tabAlea, Instance instance){
+void decRatioValPoidsPick(int* tab, Instance instance){
     double * ratios = (double*)malloc( (instance.objetNb) * sizeof(double));
 
     for(int i=0; i < instance.objetNb; i++){
@@ -101,7 +101,7 @@ void decRatioValPoidsPick(int* tabAlea, Instance instance){
     }
 
     for(int i=0; i < instance.objetNb; i++){
-        tabAlea[i] = i;
+        tab[i] = i;
     }
 
     //Tri à bulle
@@ -117,9 +117,9 @@ void decRatioValPoidsPick(int* tabAlea, Instance instance){
                 double tmpVal = ratios[i];
                 ratios[i] = ratios[i+1];
                 ratios[i+1] = tmpVal;
-                tmpVal = tabAlea[i];
-                tabAlea[i] = tabAlea[i+1];
-                tabAlea[i+1] = tmpVal;
+                tmpVal = tab[i];
+                tab[i] = tab[i+1];
+                tab[i+1] = tmpVal;
                 enOrdre = 0;
             }
         }
@@ -130,12 +130,12 @@ void decRatioValPoidsPick(int* tabAlea, Instance instance){
 }
 
 /** Remplit un tableau avec une permutation d'objets avec un ratio valeur/sommedespoids sur la dimension critique décroissant
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance, int *etatDimensions){
-    double * ratios = (double*)malloc( (tailleTabAlea) * sizeof(double));
+void decRatioValPoidsCritPick(int* tab, int tailleTab, Instance instance, int *etatDimensions){
+    double * ratios = (double*)malloc( (tailleTab) * sizeof(double));
     int dimensionCritique = 0;
 
     if(etatDimensions == NULL){
@@ -147,8 +147,8 @@ void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance
             }
         }
 
-        for(int i=0; i < tailleTabAlea; i++){
-            tabAlea[i] = i;
+        for(int i=0; i < tailleTab; i++){
+            tab[i] = i;
         }
     }
     else{
@@ -163,13 +163,13 @@ void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance
 
     //printf(" dim crit :%d \n",dimensionCritique);
 
-    for(int i=0; i < tailleTabAlea; i++){
+    for(int i=0; i < tailleTab; i++){
         ratios[i] = instance.Pj[i]/(double)instance.Rij[dimensionCritique][i];
     }
 
     //Tri à bulle
     int enOrdre = 0;
-    int taille = tailleTabAlea;
+    int taille = tailleTab;
     while(enOrdre == 0)
     {
         enOrdre = 1;
@@ -180,9 +180,9 @@ void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance
                 double tmpVal = ratios[i];
                 ratios[i] = ratios[i+1];
                 ratios[i+1] = tmpVal;
-                tmpVal = tabAlea[i];
-                tabAlea[i] = tabAlea[i+1];
-                tabAlea[i+1] = tmpVal;
+                tmpVal = tab[i];
+                tab[i] = tab[i+1];
+                tab[i+1] = tmpVal;
                 enOrdre = 0;
             }
         }
@@ -193,16 +193,16 @@ void decRatioValPoidsCritPick(int* tabAlea, int tailleTabAlea, Instance instance
 }
 
 /** Heuristique indirecte
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void Indirect(int* tabAlea, Instance instance, int typeOrdonnancement){
+void Indirect(int* tab, Instance instance, int typeOrdonnancement){
 
     int * solutionInd = (int*)malloc( (instance.objetNb) * sizeof(int));
 
     for(int i=0;i<instance.objetNb;i++)
-        tabAlea[i] = 0;
+        tab[i] = 0;
 
     switch(typeOrdonnancement){
     case 1:
@@ -222,23 +222,23 @@ void Indirect(int* tabAlea, Instance instance, int typeOrdonnancement){
         break;
     }
 
-    decode(solutionInd,instance.objetNb,tabAlea,instance);
+    decode(solutionInd,instance.objetNb,tab,instance);
     free(solutionInd);
 }
 
 /** Heuristique directe
- * @param tabAlea le tableau dans lequel sera stocké la permutation
+ * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation
- * Préconditions : tabAlea non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
  */
-void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
+void Direct(int* tab, Instance instance, int typeOrdonnancement){
     int * solutionInd = (int*)malloc( (instance.objetNb) * sizeof(int));
     int * solutionIndFirst = solutionInd;
     int *sommePoids = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
     int *etatDimensions = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
 
     for(int i=0;i<instance.objetNb;i++)
-        tabAlea[i] = 0;
+        tab[i] = 0;
 
     switch(typeOrdonnancement){
     case 1:
@@ -279,7 +279,7 @@ void Direct(int* tabAlea, Instance instance, int typeOrdonnancement){
             for(int j=0; j<instance.dimensionNb; j++){
                 sommePoids[j]+=instance.Rij[j][*solutionInd];
             }
-            tabAlea[*solutionInd] = 1;
+            tab[*solutionInd] = 1;
 
             if(typeOrdonnancement == 6){
                 for(int i=0;i<instance.dimensionNb;i++){
