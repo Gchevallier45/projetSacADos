@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     strcat(dest,"/_mknapcb1_res.txt");
     printf("%s\n",dest);*/
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
+    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb2_res.txt","r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        Indirect(tabAlea,grInstances->instances[i],2);
+        //Indirect(tabAlea,grInstances->instances[i],3);
+        metaLocalIndirecte(tabAlea,grInstances->instances[i]);
         printf("   %f   |",timer_getTime(time1000));
         int resultat = directResultat(tabAlea,grInstances->instances[i].Pj,grInstances->instances[i].objetNb);
         printf("   %.2f%%   |",100*(resultat/(double)grInstances->instances[i].sol1));//,resultat,grInstances->instances[i].sol1);
@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
     }
     printf("\n              | QUALITE SOLUTIONS --> %.2f%% |\n\n",moyennePourcentage/grInstances->instancesNb);
 
-    metaLocalIndirecte(NULL,grInstances->instances[0]);
+    //metaLocalIndirecte(NULL,grInstances->instances[0]);
     /*affSoluce(grInstances->instances[0].sol1);
     writeSoluce(grInstances->instances[0].sol1);*/
     InstanceTableau_videDetruire(grInstances);

@@ -222,9 +222,7 @@ void Indirect(int* tab, Instance instance, int typeOrdonnancement){
         break;
     }
 
-    decode(solutionInd,instance.objetNb,tab,instance);
-    //affSoluce(solutionInd,instance.objetNb);
-    //affSoluce(tab,instance.objetNb);
+    decode(solutionInd,instance.objetNb,tab,&instance);
     free(solutionInd);
 }
 
@@ -269,7 +267,7 @@ void Direct(int* tab, Instance instance, int typeOrdonnancement){
         int resultTest = 0;
 
         for(int j=0; j<instance.dimensionNb; j++){
-            if(sommePoids[j]+instance.Rij[j][*solutionInd-1] < instance.Bi[j]){
+            if(sommePoids[j]+instance.Rij[j][*solutionInd-1] <= instance.Bi[j]){
                 resultTest++;
             }
             else{
@@ -306,5 +304,4 @@ void Direct(int* tab, Instance instance, int typeOrdonnancement){
     free(sommePoids);
     free(solutionIndFirst);
     free(etatDimensions);
-        //affSoluce(tab,instance.objetNb);
 }

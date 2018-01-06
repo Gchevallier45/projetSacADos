@@ -6,7 +6,9 @@ int directResultat(int* solutionBinaire, int* valeur, int nbObjets){
     int resultat = 0;
 
     for(i = 0; i < nbObjets; i++){
-        resultat = resultat + solutionBinaire[i] * valeur[i];
+        resultat = resultat + *solutionBinaire * *valeur;
+        solutionBinaire++;
+        valeur++;
     }
 
     //prend en entrée le tableau de la struct et la liste des objets de l'instance
@@ -55,15 +57,16 @@ void writeSoluce(int solu){
     fclose(fichier);
 }
 
-void decode(int *permutation, int nbPermutations, int *solution, Instance instance){
-    int *sommePoids = calloc(instance.dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
+void decode(int *permutation, int nbPermutations, int *solution, Instance *instance){
+    int dimensionNb = instance->dimensionNb;
+    int *sommePoids = calloc(dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
     int *endpermut = permutation + nbPermutations;
 
     while(permutation < endpermut){
         int resultTest = 0;
 
-        for(int j=0; j<instance.dimensionNb; j++){
-            if(sommePoids[j]+instance.Rij[j][*permutation-1] < instance.Bi[j]){
+        /*for(int j=0; j<dimensionNb; j++){
+            if(sommePoids[j]+instance->Rij[j][*permutation-1] < instance->Bi[j]){
                 resultTest++;
             }
             else{
@@ -71,10 +74,26 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance instan
             }
         }
 
-        if(resultTest == instance.dimensionNb){
-            for(int j=0; j<instance.dimensionNb; j++){
-                sommePoids[j]+=instance.Rij[j][*permutation-1];
+        if(resultTest == dimensionNb){
+            for(int j=0; j<dimensionNb; j++){
+                sommePoids[j]+=instance->Rij[j][*permutation-1];
             }
+            solution[*permutation-1] = 1;
+        }*/
+
+        int j;
+        for(j=0; j<dimensionNb; j++){
+            sommePoids[j]+=instance->Rij[j][*permutation-1];
+            if(sommePoids[j] > instance->Bi[j]){
+                //printf("loool");
+                for(int k=0; k<=j; k++){
+                    sommePoids[k]-=instance->Rij[k][*permutation-1];
+                }
+                break;
+            }
+        }
+
+        if(j == dimensionNb){
             solution[*permutation-1] = 1;
         }
 
