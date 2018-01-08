@@ -133,7 +133,6 @@ void metaLocalDirecte(int* tab, Instance *instance){
                         solutionVoisine[i] = 1;
                         solutionVoisine[j] = 0;
 
-                        //affSoluce(solutionVoisine,instance->objetNb);
                     }
                 }
             }

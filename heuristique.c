@@ -154,7 +154,7 @@ void decRatioValPoidsCritPick(int* tab, int tailleTab, Instance *instance, int *
     }
 
     for(int i=0; i < tailleTab; i++){
-        ratios[i] = instance->Pj[i]/(double)instance->Rij[dimensionCritique][i];
+        ratios[i] = instance->Pj[tab[i]-1]/(double)instance->Rij[dimensionCritique][tab[i]-1];
     }
 
     //Tri à bulle
