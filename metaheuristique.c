@@ -71,3 +71,91 @@ void metaLocalIndirecte(int* tab, Instance *instance){
     free(solutionVoisine);
     free(solutionBestVoisine);
 }
+
+
+/** Metaheuristique locale directe
+ * @param tab le tableau dans lequel sera stocké la solution
+ * @param instance l'instance à utiliser pour générer la solution
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
+ */
+void metaLocalDirecte(int* tab, Instance *instance){
+    int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage direct
+    int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage direct
+    int *solutionVoisine = malloc(instance->objetNb*sizeof(int)); //En codage direct
+    int *solutionBestVoisine = malloc(instance->objetNb*sizeof(int)); //En codage direct
+
+    Direct(solutionCourante, instance,3); //On génère la solution de départ avec l'algo d'ordonnancement le + performant
+    memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
+    memcpy(solutionBestVoisine,solutionCourante,instance->objetNb*sizeof(int));
+
+    //Calcul de fbest
+    int fbest = directResultat(solutionCourante,instance);
+    int continuer = 1;
+    int fcourant = fbest;
+    int fprec = fcourant;
+
+    while(continuer == 1){
+        memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
+        int fbestvoisin = 0;
+        for(int i=0;i<instance->objetNb;i++){ //Première boucle for qui permet de changer les 0 en 1
+            if(solutionVoisine[i]==0){
+                //On met l'objet i dans le sac
+                solutionVoisine[i] = 1;
+
+                //Evaluation de la solution voisine
+                int resultat=directResultat(solutionVoisine,instance);
+                if(resultat > fbestvoisin && directFaisable(solutionVoisine,instance) == 1){
+                    memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
+                    fbestvoisin = resultat;
+                }
+
+                //On le retire du sac pour passer à une autre solution
+                solutionVoisine[i] = 0;
+            }
+        }
+
+        for(int i=0;i<instance->objetNb;i++){ //Deuxième boucle for qui permet de permuter des éléments
+            if(solutionVoisine[i] == 1){
+                for(int j=0;j<instance->objetNb;j++){
+                    if(solutionVoisine[j] == 0){
+                        //Permutation des éléments
+                        solutionVoisine[i] = 0;
+                        solutionVoisine[j] = 1;
+
+                        //Evaluation de la solution voisine
+                        int resultat=directResultat(solutionVoisine,instance);
+                        if(resultat > fbestvoisin && directFaisable(solutionVoisine,instance) == 1){
+                            memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
+                            fbestvoisin = resultat;
+                        }
+
+                        //Permutation des éléments
+                        solutionVoisine[i] = 1;
+                        solutionVoisine[j] = 0;
+
+                        //affSoluce(solutionVoisine,instance->objetNb);
+                    }
+                }
+            }
+        }
+
+        fcourant = fbestvoisin;
+        memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
+        if(fcourant>fbest){
+            fbest=fcourant;
+            memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
+        }
+        else if(fcourant<=fprec){
+            continuer = 0;
+        }
+        fprec = fcourant;
+    }
+
+    //Copie de la solution dans le tableau de destination
+    memcpy(tab,solutionCourante,instance->objetNb*sizeof(int));
+
+    free(solutionCourante);
+    free(solutionBest);
+    free(solutionVoisine);
+    free(solutionBestVoisine);
+}

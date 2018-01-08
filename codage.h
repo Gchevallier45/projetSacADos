@@ -14,11 +14,12 @@
  */
 int directResultat(int *solutionBinaire, Instance *instance);
 
-/** Renvoie 1 si la solution est faisable, 0 sinon
- * @param
- * @param
+/** Teste si la solution est faisable
+ * @param solutionBinaire un tableau de int contenant la solution directe
+ * @param instance l'instance correspondant à la solution
+ * @return 1 si la solution est faisable, 0 sinon
  */
-int directFaisable(int valeurSac, int valeurMax);
+int directFaisable(int* solutionBinaire, Instance *instance);
 
 /** Affiche une solution
  * @param solution un tableau de int contenant une solution

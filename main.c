@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    //srand(time(NULL));
+    srand(time(NULL));
     //core(argc,argv);
 
     /*Parameters p;
@@ -34,14 +34,19 @@ int main(int argc, char *argv[])
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
 
+    /*int *testtab = malloc(100*sizeof(int));
+    for(int i=0; i<100;i++)
+        testtab[i] = 1;
+    printf("RESULTAT : %d",directFaisable(grInstances->instances[0].Xj,&grInstances->instances[0]));*/
+
     double moyennePourcentage = 0;
     printf("INSTANCE | TEMPS CALCUL | %% SOLUTION | SOLUTION | SOLUTION MAX \n");
     for(int i=0; i<grInstances->instancesNb; i++){
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        //Direct(tabAlea,&grInstances->instances[i],6);
-        metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
+        //Direct(tabAlea,&grInstances->instances[i],3);
+        metaLocalDirecte(tabAlea,&grInstances->instances[i]);
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
         printf("   %f   |   %.2f%%   |  %d   |   %d     \n",timer_getTime(time1000),100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
         free(tabAlea);

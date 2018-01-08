@@ -18,12 +18,27 @@ int directResultat(int* solutionBinaire, Instance *instance){
     return resultat;
 }
 
-/** Renvoie 1 si la solution est faisable, 0 sinon
- * @param
- * @param
+/** Teste si la solution est faisable
+ * @param solutionBinaire un tableau de int contenant la solution directe
+ * @param instance l'instance correspondant à la solution
+ * @return 1 si la solution est faisable, 0 sinon
  */
-int directFaisable(int valeurSac, int valeurMax){
-    return(valeurSac <= valeurMax);
+int directFaisable(int* solutionBinaire, Instance *instance){
+    int dimensionNb = instance->dimensionNb;
+    int *sommePoids = calloc(dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
+    for(int i=0; i<instance->objetNb; i++){
+        if(solutionBinaire[i] == 1){
+            for(int j=0; j<dimensionNb; j++){
+                sommePoids[j]+=instance->Rij[j][i]; //Par défaut on considère que l'objet rentre dans le sac (permet de gagner un peu de temps)
+                if(sommePoids[j] > instance->Bi[j]){ //Si ce n'est pas le cas on l'enlève du sac
+                    free(sommePoids);
+                    return 0;
+                }
+            }
+        }
+    }
+    free(sommePoids);
+    return 1;
 }
 
 /** Affiche une solution
@@ -65,28 +80,10 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance *insta
     int *endpermut = permutation + nbPermutations;
 
     while(permutation < endpermut){
-        /*int resultTest = 0;
-
-        for(int j=0; j<dimensionNb; j++){
-            if(sommePoids[j]+instance->Rij[j][*permutation-1] < instance->Bi[j]){
-                resultTest++;
-            }
-            else{
-                break;
-            }
-        }
-
-        if(resultTest == dimensionNb){
-            for(int j=0; j<dimensionNb; j++){
-                sommePoids[j]+=instance->Rij[j][*permutation-1];
-            }
-            solution[*permutation-1] = 1;
-        }*/
-
         int j;
         for(j=0; j<dimensionNb; j++){
-            sommePoids[j]+=instance->Rij[j][*permutation-1];
-            if(sommePoids[j] > instance->Bi[j]){
+            sommePoids[j]+=instance->Rij[j][*permutation-1]; //Par défaut on considère que l'objet rentre dans le sac (permet de gagner un peu de temps)
+            if(sommePoids[j] > instance->Bi[j]){ //Si ce n'est pas le cas on l'enlève du sac
                 for(int k=0; k<=j; k++){
                     sommePoids[k]-=instance->Rij[k][*permutation-1];
                 }
@@ -94,6 +91,7 @@ void decode(int *permutation, int nbPermutations, int *solution, Instance *insta
             }
         }
 
+        //Si l'objet rentre dans toutes les dimensions on met la case de l'objet à 1 dans la solution directe
         if(j == dimensionNb){
             solution[*permutation-1] = 1;
         }
