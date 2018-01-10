@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        //Direct(tabAlea,&grInstances->instances[i],1);
-        metaLocalDirecte(tabAlea,&grInstances->instances[i]);
+        //Direct(tabAlea,&grInstances->instances[i],3);
+        metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
         printf("   %f   |   %.2f%%   |  %d   |   %d     \n",timer_getTime(time1000),100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
         free(tabAlea);
