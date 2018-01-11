@@ -173,7 +173,9 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int *solutionBestVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solution = calloc(instance->objetNb,sizeof(int)); //En codage direct
 
-    int *tabou[2] = malloc(tabouSize * sizeof(int*));
+    int tabou[tabouSize][2];
+    for(int i = 0; i<tabouSize;i++)
+        memset(tabou[i],0,2);
 
     decRatioValPoidsPick(solutionCourante, instance); //On génère la solution de départ avec l'algo d'ordonnancement le + performant
     memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
@@ -185,6 +187,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int continuer = 1;
     int fcourant = fbest;
     int fprec = fcourant;
+    int k = 0;
 
     while(continuer == 1){
         memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
@@ -211,13 +214,19 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                 solutionVoisine[j] = tmp;
             }
         }
+
+
         //comparaison de la solutioncourante avec bestsolutionvoisine et regarde l'élément qui a changé
-        for(i = 0; i<instance->objetNb; i++){
-            if(solutionCourante[i] == solutionBestVoisine[i]){
-                tabou[i][0] = solutionCourante[i];
-                tabou[i][1] = solutionBestVoisine[i];
-                }
+        for(int i = 0; i<instance->objetNb; i++){
+            if(solutionCourante[i] != solutionBestVoisine[i]){
+                tabou[k][0] = solutionCourante[i];
+                tabou[k][1] = solutionBestVoisine[i];
+                k++;
+            }
         }
+        if (k == tabouSize)
+            k = 0;
+
         fcourant = fbestvoisin;
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
         if(fcourant>fbest){
