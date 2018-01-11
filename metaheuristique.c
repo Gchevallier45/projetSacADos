@@ -167,7 +167,7 @@ void metaLocalDirecte(int* tab, Instance *instance){
  */
 
 void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize){
-    int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+    /*int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBestVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
@@ -239,7 +239,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     free(solutionCourante);
     free(solutionBest);
     free(solutionVoisine);
-    free(solutionBestVoisine);
+    free(solutionBestVoisine);*/
 
 
 }
@@ -267,7 +267,7 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
     int fcourant = fbest;
 
     while(nbIte < nbIteMax){
-        int mouvementUtil[2];
+        int *mouvementUtil = malloc(2*sizeof(int));
         memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
         int fbestvoisin = 0;
         for(int i=0;i<instance->objetNb;i++){ //Première boucle for qui permet de changer les 0 en 1
@@ -316,7 +316,7 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
                     if(solutionVoisine[j] == 0){
                         int estTabou = 0;
                         for(int itabou = 0;itabou<nbMouvements;itabou++){
-                            if(listeMouvements[itabou][0] == i && listeMouvements[itabou][1] == j){
+                            if((listeMouvements[itabou][0] == i || listeMouvements[itabou][0] == j) && (listeMouvements[itabou][1] == i || listeMouvements[itabou][1] == j)){
                                 estTabou = 1;
                                 break;
                             }
@@ -360,24 +360,35 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
         fcourant = fbestvoisin;
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
 
+        /*printf("-----\n");
+        for (int i=0; i<nbMouvements;i++)
+            affSoluce(listeMouvements[i],2);
+        printf("\n");*/
+
         int estTabou = 0;
         for(int itabou = 0;itabou<nbMouvements;itabou++){
-            if(listeMouvements[itabou][0] == mouvementUtil[0] && listeMouvements[itabou][1] == mouvementUtil[1]){
+            if((listeMouvements[itabou][0] == mouvementUtil[0] || listeMouvements[itabou][0] == mouvementUtil[1]) && (listeMouvements[itabou][1] == mouvementUtil[0] || listeMouvements[itabou][1] == mouvementUtil[1])){
                 estTabou = 1;
                 break;
             }
         }
-        if(estTabou == 0)
-            nbMouvements++;
 
-        if(nbMouvements <= tailleListe){ //On teste si le nombre de mouvements est inférieur ou égal à la taille max de la liste
+        if(nbMouvements < tailleListe){ //On teste si le nombre de mouvements est inférieur ou égal à la taille max de la liste
+            if(estTabou == 0)
+                nbMouvements++;
             listeMouvements = realloc(listeMouvements,nbMouvements*sizeof(int*));
         }
         else{ //Sinon on décale de tableau pour stocker la dernière permutation
-            for (int i=0; i<tailleListe;i++)
+            for (int i=0; i<tailleListe;i++){
                 listeMouvements[i] = listeMouvements[i+1];
+            }
         }
         listeMouvements[nbMouvements-1]=mouvementUtil;
+
+        for (int i=0; i<nbMouvements;i++)
+            affSoluce(listeMouvements[i],2);
+        printf("-----\n");
+        //printf("%d\n",nbMouvements);
 
         if(fcourant>fbest){
             fbest=fcourant;
