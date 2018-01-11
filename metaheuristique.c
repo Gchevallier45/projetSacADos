@@ -266,8 +266,10 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
     int nbIte = 0;
     int fcourant = fbest;
 
+    int *mouvementUtil = malloc(2*sizeof(int));
     while(nbIte < nbIteMax){
-        int *mouvementUtil = malloc(2*sizeof(int));
+        mouvementUtil[0] = 0;
+        mouvementUtil[1] = 0;
         memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
         int fbestvoisin = 0;
         for(int i=0;i<instance->objetNb;i++){ //Première boucle for qui permet de changer les 0 en 1
@@ -379,15 +381,17 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
             listeMouvements = realloc(listeMouvements,nbMouvements*sizeof(int*));
         }
         else{ //Sinon on décale de tableau pour stocker la dernière permutation
+            free(listeMouvements[0]);
             for (int i=0; i<tailleListe;i++){
                 listeMouvements[i] = listeMouvements[i+1];
             }
         }
         listeMouvements[nbMouvements-1]=mouvementUtil;
 
-        for (int i=0; i<nbMouvements;i++)
-            affSoluce(listeMouvements[i],2);
-        printf("-----\n");
+        //printf("%d %d\n",mouvementUtil[0],mouvementUtil[1]);
+        //for (int i=0; i<nbMouvements;i++)
+        //    affSoluce(listeMouvements[i],2);
+        //printf("-----\n");
         //printf("%d\n",nbMouvements);
 
         if(fcourant>fbest){
@@ -395,8 +399,10 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
             memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
             nbIte=0;
         }
+
         nbIte++;
     }
+    free(mouvementUtil);
 
     //Copie de la solution dans le tableau de destination
     memcpy(tab,solutionCourante,instance->objetNb*sizeof(int));
