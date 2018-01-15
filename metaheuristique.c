@@ -166,14 +166,16 @@ void metaLocalDirecte(int* tab, Instance *instance){
  * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
  */
 
-void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize){
-    /*int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
+    int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBestVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solution = calloc(instance->objetNb,sizeof(int)); //En codage direct
 
-    int *tabou[2] = malloc(tabouSize * sizeof(int*));
+    int tabou[tabouSize][2];
+    for(int i = 0; i<tabouSize;i++)
+        memset(tabou[i],0,2);
 
     decRatioValPoidsPick(solutionCourante, instance); //On génère la solution de départ avec l'algo d'ordonnancement le + performant
     memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
@@ -186,38 +188,54 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int fcourant = fbest;
     int fprec = fcourant;
 
+    int k = 0;
+    int p;
+    int flag;
+
     while(continuer == 1){
         memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
         int fbestvoisin = 0;
         for(int i=0;i<instance->objetNb/2;i++){
             for(int j=i+1;j<instance->objetNb;j++){ //j=i+1 car les permutations de 0 à i+1 ont déjà été effectuées dans les itérations d'avant
                 //Permutation des éléments
-                int tmp = solutionVoisine[i];
-                solutionVoisine[i] = solutionVoisine[j];
-                solutionVoisine[j] = tmp;
-
-                //Décodage et évaluation de la solution voisine
-                memset(solution,0,instance->objetNb*sizeof(int));
-                decode(solutionVoisine,instance->objetNb,solution,instance);
-                int resultat=directResultat(solution,instance);
-                if(resultat > fbestvoisin){
-                    memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
-                    fbestvoisin = resultat;
+                flag = 0;
+                for(p = 0; p < tabouSize; p++){
+                    if((solutionVoisine[i] == tabou[p][0] && solutionVoisine[j] == tabou[p][1]) || (solutionVoisine[i] == tabou[p][1] && solutionVoisine[j] == tabou[p][0]))
+                        flag = 1;
                 }
+                if( (flag == 1 && aspi == 1) || flag == 0){
 
-                //Dépermutation des éléments pour restaurer la solutionCourante
-                tmp = solutionVoisine[i];
-                solutionVoisine[i] = solutionVoisine[j];
-                solutionVoisine[j] = tmp;
+                    int tmp = solutionVoisine[i];
+                    solutionVoisine[i] = solutionVoisine[j];
+                    solutionVoisine[j] = tmp;
+
+                    //Décodage et évaluation de la solution voisine
+                    memset(solution,0,instance->objetNb*sizeof(int));
+                    decode(solutionVoisine,instance->objetNb,solution,instance);
+                    int resultat=directResultat(solution,instance);
+                    if(resultat > fbestvoisin){
+                        memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
+                        fbestvoisin = resultat;
+                    }
+
+                    //Dépermutation des éléments pour restaurer la solutionCourante
+                    tmp = solutionVoisine[i];
+                    solutionVoisine[i] = solutionVoisine[j];
+                    solutionVoisine[j] = tmp;
+                }
             }
         }
         //comparaison de la solutioncourante avec bestsolutionvoisine et regarde l'élément qui a changé
-        for(i = 0; i<instance->objetNb; i++){
-            if(solutionCourante[i] == solutionBestVoisine[i]){
-                tabou[i][0] = solutionCourante[i];
-                tabou[i][1] = solutionBestVoisine[i];
-                }
+        for(int i = 0; i<instance->objetNb; i++){
+            if(solutionCourante[i] != solutionBestVoisine[i]){
+                tabou[k][0] = solutionCourante[i];
+                tabou[k][1] = solutionBestVoisine[i];
+                k++;
+            }
         }
+        if (k == tabouSize) //si la liste de tabou est remplie on recommence à le remplir du début
+            k = 0;
+
         fcourant = fbestvoisin;
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
         if(fcourant>fbest){
@@ -239,7 +257,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     free(solutionCourante);
     free(solutionBest);
     free(solutionVoisine);
-    free(solutionBestVoisine);*/
+    free(solutionBestVoisine);
 
 
 }
