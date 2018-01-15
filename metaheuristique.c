@@ -247,6 +247,9 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
 /** Metaheuristique tabou directe
  * @param tab le tableau dans lequel sera stocké la solution
  * @param instance l'instance à utiliser pour générer la solution
+ * @param NbIteMax le nombre d'itérations maximum sans trouver une meilleure solution courante
+ * @param aspi le critère d'aspiration (1 si on active le critère d'aspiration, 0 sinon)
+ * @param tailleListe la taille de la liste de mouvement taboues
  * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
  */
 void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int tailleListe){
@@ -362,11 +365,6 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
         fcourant = fbestvoisin;
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
 
-        /*printf("-----\n");
-        for (int i=0; i<nbMouvements;i++)
-            affSoluce(listeMouvements[i],2);
-        printf("\n");*/
-
         int estTabou = 0;
         for(int itabou = 0;itabou<nbMouvements;itabou++){
             if((listeMouvements[itabou][0] == mouvementUtil[0] || listeMouvements[itabou][0] == mouvementUtil[1]) && (listeMouvements[itabou][1] == mouvementUtil[0] || listeMouvements[itabou][1] == mouvementUtil[1])){
@@ -383,7 +381,7 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
             listeMouvements[nbMouvements-1][0]=mouvementUtil[0];
             listeMouvements[nbMouvements-1][1]=mouvementUtil[1];
         }
-        else{ //Sinon on décale de tableau pour stocker la dernière permutation
+        else{ //Sinon on écrit par dessus les anciennes valeurs
             listeMouvements[nbIte%nbMouvements][0]=mouvementUtil[0];
             listeMouvements[nbIte%nbMouvements][1]=mouvementUtil[1];
         }
@@ -413,5 +411,7 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
     free(solutionBest);
     free(solutionVoisine);
     free(solutionBestVoisine);
+    for(int i=0; i<nbMouvements;i++)
+        free(listeMouvements[i]);
     free(listeMouvements);
 }
