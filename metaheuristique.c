@@ -379,16 +379,14 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
             if(estTabou == 0)
                 nbMouvements++;
             listeMouvements = realloc(listeMouvements,nbMouvements*sizeof(int*));
+            listeMouvements[nbMouvements-1] = malloc(2*sizeof(int));
+            listeMouvements[nbMouvements-1][0]=mouvementUtil[0];
+            listeMouvements[nbMouvements-1][1]=mouvementUtil[1];
         }
         else{ //Sinon on décale de tableau pour stocker la dernière permutation
-            free(listeMouvements[0]);
-            for (int i=0; i<tailleListe;i++){
-                listeMouvements[i] = listeMouvements[i+1];
-            }
+            listeMouvements[nbIte%nbMouvements][0]=mouvementUtil[0];
+            listeMouvements[nbIte%nbMouvements][1]=mouvementUtil[1];
         }
-        listeMouvements[nbMouvements-1] = malloc(2*sizeof(int));
-        listeMouvements[nbMouvements-1][0]=mouvementUtil[0];
-        listeMouvements[nbMouvements-1][1]=mouvementUtil[1];
 
         /*printf("%d\n",nbMouvements);
         printf("%d %d\n",mouvementUtil[0],mouvementUtil[1]);
@@ -400,7 +398,6 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
         printf("-----\n");*/
 
         if(fcourant>fbest){
-                //printf("found best\n");
             fbest=fcourant;
             memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
             nbIte=0;
