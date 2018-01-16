@@ -12,7 +12,7 @@ typedef struct _Population{
     int type;
 } Population;
 
-void initPopulation(Population *population, int taillePopulation, int typeSolutions, Instance *instance);
+void creerPopulation(Population *population, int taillePopulation, int typeSolutions, Instance *instance);
 
 void detruirePopulation(Population *population);
 
