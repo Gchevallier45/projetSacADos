@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
         //Direct(tabAlea,&grInstances->instances[i],3);
-        //metaTabouDirecte(tabAlea,&grInstances->instances[i],300,1,40);
+        metaTabouDirecte(tabAlea,&grInstances->instances[i],600,1,50);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
         //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 300, 18, 1);
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],1500,1,50);
-        metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],10,10,50);
+        //metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],10,10,50);
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
         printf("   %f   |   %.2f%%   |  %d   |   %d     \n",timer_getTime(time1000),100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
