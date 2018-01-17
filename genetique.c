@@ -75,21 +75,26 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int pointCroisement = rand() % instance->objetNb;
             int *enfant1 = malloc(instance->objetNb*sizeof(int));
             int *enfant2 = malloc(instance->objetNb*sizeof(int));
+            memcpy(enfant1,pop->solutions[parents[0]],pointCroisement*sizeof(int));
+            memcpy(enfant1+pointCroisement,pop->solutions[parents[1]]+pointCroisement,(instance->objetNb-pointCroisement)*sizeof(int));
+            memcpy(enfant2,pop->solutions[parents[1]],pointCroisement*sizeof(int));
+            memcpy(enfant2+pointCroisement,pop->solutions[parents[0]]+pointCroisement,(instance->objetNb-pointCroisement)*sizeof(int));
 
-            int *parent1 = pop->solutions[parents[0]];
-            int *parent2 = pop->solutions[parents[1]];
-            int p=0;
-            while(parent1<(parent1+instance->objetNb)){
-                printf("%d\n",p);
-                p++;
-                parent1++;
+            int valEnfant1;
+            int valEnfant2;
+            while(directFaisable(enfant1,instance) == 0){
+                printf("IMPOSSIBLE : %d\n",directResultat(enfant1,instance));
+                enfant1[rand() % instance->objetNb] = 0;
             }
-            memcpy(enfant1,pop->solutions[parents[0]],pointCroisement);
-            memcpy(enfant1+pointCroisement,pop->solutions[parents[0]]+pointCroisement,instance->objetNb-pointCroisement);
+            valEnfant1 = directResultat(enfant1,instance);
+            valEnfant2 = directResultat(enfant2,instance);
+
             printf("-----------\n");
-            affSoluce(pop->solutions[parents[0]],instance->objetNb);
-            affSoluce(enfant1,instance->objetNb);
-            printf("point crois %d, deux copie %d, total %d\n\n",pointCroisement,instance->objetNb-pointCroisement,instance->objetNb-pointCroisement+pointCroisement);
+            printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);
+            //affSoluce(pop->solutions[parents[0]],instance->objetNb);
+            //affSoluce(pop->solutions[parents[1]],instance->objetNb);
+            //affSoluce(enfant2,instance->objetNb);
+            //printf("point crois %d, deux copie %d, total %d\n\n",pointCroisement,instance->objetNb-pointCroisement,instance->objetNb-pointCroisement+pointCroisement);
 
             //printf("PARENT 1 : %d, PARENT 2 : %d\n",parents[0],parents[1]);
         }

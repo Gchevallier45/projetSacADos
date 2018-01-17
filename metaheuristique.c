@@ -178,7 +178,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
         tabou[i][0] = 0;
         tabou[i][1] = 0;
     }
-
+    //randPick(solutionCourante, instance);
     decRatioValPoidsPick(solutionCourante, instance); //On génère la solution de départ avec l'algo d'ordonnancement le + performant
     memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
     memcpy(solutionBestVoisine,solutionCourante,instance->objetNb*sizeof(int));
@@ -186,32 +186,31 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     //Calcul de fbest
     decode(solutionCourante,instance->objetNb,solution,instance);
     int fbest = directResultat(solution,instance);
-    int continuer = 1;
+    //int continuer = 1;
     int fcourant = fbest;
-    int fprec = fcourant;
 
     int k = 0; //compteur dans l'emplacement tabou
     int p;
     int estTabou;
     int nbIte = 0;
     int tabouTampon[2];
-    int meilleur;
+    int meilleur = 0;
 
     while(nbIte < nbIteMax){
-        meilleur = 0;
+
         memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
         int fbestvoisin = 0;
         for(int i=0;i<instance->objetNb/2;i++){
             for(int j=i+1;j<instance->objetNb;j++){ //j=i+1 car les permutations de 0 à i+1 ont déjà été effectuées dans les itérations d'avant
-                //Permutation des éléments
+
                 estTabou = 0;
                 for(p = 0; p < tabouSize; p++){
                     if((solutionVoisine[i] == tabou[p][0] && solutionVoisine[j] == tabou[p][1]) || (solutionVoisine[i] == tabou[p][1] && solutionVoisine[j] == tabou[p][0]))
                         estTabou = 1;
                 }
 
-                if( estTabou == 0 || aspi == 1) {
-
+                if(estTabou == 0 || aspi == 1){
+                    //Permutation des éléments
                     int tmp = solutionVoisine[i];
                     solutionVoisine[i] = solutionVoisine[j];
                     solutionVoisine[j] = tmp;
@@ -221,7 +220,8 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         memset(solution,0,instance->objetNb*sizeof(int));
                         decode(solutionVoisine,instance->objetNb,solution,instance);
                         int resultat=directResultat(solution,instance);
-                        if(resultat > fbestvoisin){
+                        if(resultat > fbestvoisin && resultat != fbest && resultat != fcourant){
+
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
                             fbestvoisin = resultat;
                             tabouTampon[0] = solutionVoisine[i];
@@ -231,10 +231,10 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         memset(solution,0,instance->objetNb*sizeof(int));
                         decode(solutionVoisine,instance->objetNb,solution,instance);
                         int resultat=directResultat(solution,instance);
-                        if(resultat > fbest){
-                            meilleur++;
+                        if(resultat > fbest && resultat != fbest && resultat != fcourant){
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
-                            fbest = resultat;
+                            //fbest = resultat;
+                            fbestvoisin = resultat;
                             tabouTampon[0] = solutionVoisine[i];
                             tabouTampon[1] = solutionVoisine[j];
 
@@ -259,23 +259,26 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
 
         fcourant = fbestvoisin;
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
+
         if(fcourant>fbest){
             meilleur++;
             fbest=fcourant;
             memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
+            nbIte = 0;
         }
         /*else if(fcourant<=fprec){
             continuer = 0;
         }*/
-        fprec = fcourant;
+
         nbIte++;
     }
-    printf("\nAmeliorez %d fois\n",meilleur);
+    printf("\nChangement %d fois de solution\n",meilleur);
     printf("\n");
-    for(int i = 0; i< tabouSize; i++){
+    //printf("nombre de solution exploré : %d",nbSoluce);
+    /*for(int i = 0; i< tabouSize; i++){
         printf("%d| %d| \n",tabou[i][0],tabou[i][1]);
-    }
-    printf("%d",k);
+    }*/
+
 
     //Copie de la solution dans le tableau de destination
     memset(solution,0,instance->objetNb*sizeof(int));
