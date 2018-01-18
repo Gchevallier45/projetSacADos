@@ -47,9 +47,6 @@ int main(int argc, char *argv[])
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
         //Direct(tabAlea,&grInstances->instances[i],3);
-
-
-        //metaTabouDirecte(tabAlea,&grInstances->instances[i],300,1,40);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
         //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 800, 500, 1);
 
