@@ -194,7 +194,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int estTabou;
     int nbIte = 0;
     int tabouTampon[2];
-    int meilleur = 0;
+    //int meilleur = 0;
 
     while(nbIte < nbIteMax){
 
@@ -262,7 +262,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
 
         if(fcourant>fbest){
-            meilleur++;
+            //meilleur++;
             fbest=fcourant;
             memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
             nbIte = 0;
@@ -273,8 +273,8 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
 
         nbIte++;
     }
-    printf("\nChangement %d fois de solution\n",meilleur);
-    printf("\n");
+    //printf("\nChangement %d fois de solution\n",meilleur);
+    //printf("\n");
     //printf("nombre de solution exploré : %d",nbSoluce);
     /*for(int i = 0; i< tabouSize; i++){
         printf("%d| %d| \n",tabou[i][0],tabou[i][1]);
