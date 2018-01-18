@@ -62,6 +62,7 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
         initPopulation(enfant,taillePopu,DIRECT);
 
         for(int i=0;i<taillePopu/2;i++){
+            int parentsSelect[4];
             int parents[2];
 
             //On séléctionne des parents aléatoires

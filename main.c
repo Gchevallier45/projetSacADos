@@ -47,11 +47,11 @@ int main(int argc, char *argv[])
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
         //Direct(tabAlea,&grInstances->instances[i],3);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
-        metaTabouIndirecte(tabAlea, &grInstances->instances[i], 600, 100, 1);
+        //metaTabouIndirecte(tabAlea, &grInstances->instances[i],100, 100, 0);
 
 
-        //metaTabouDirecte(tabAlea,&grInstances->instances[i],1500,1,50);
-        //metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],10,10,50);
+        //metaTabouDirecte(tabAlea,&grInstances->instances[i],200,1,10);
+        metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],10,10,50);
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);

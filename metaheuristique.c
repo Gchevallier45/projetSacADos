@@ -205,8 +205,10 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
 
                 estTabou = 0;
                 for(p = 0; p < tabouSize; p++){
-                    if((solutionVoisine[i] == tabou[p][0] && solutionVoisine[j] == tabou[p][1]) || (solutionVoisine[i] == tabou[p][1] && solutionVoisine[j] == tabou[p][0]))
+                    if((solutionVoisine[i] == tabou[p][0] && solutionVoisine[j] == tabou[p][1]) || (solutionVoisine[i] == tabou[p][1] && solutionVoisine[j] == tabou[p][0])){
                         estTabou = 1;
+                        break;
+                    }
                 }
 
                 if(estTabou == 0 || aspi == 1){
@@ -221,7 +223,6 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         decode(solutionVoisine,instance->objetNb,solution,instance);
                         int resultat=directResultat(solution,instance);
                         if(resultat > fbestvoisin && resultat != fbest && resultat != fcourant){
-
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
                             fbestvoisin = resultat;
                             tabouTampon[0] = solutionVoisine[i];
