@@ -65,12 +65,48 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int parentsSelect[4];
             int parents[2];
 
-            //On séléctionne des parents aléatoires
-            parents[0] = rand() % taillePopu;
-            parents[1] = rand() % taillePopu;
-            while(parents[0] == parents[1]){
-                parents[1] = rand() % taillePopu;
+            //On séléctionne 4 parents aléatoires
+            int *permutation = malloc(pop->taillePopu*sizeof(int));
+            int * intermediaire = (int*)malloc( (pop->taillePopu) * sizeof(int));
+            for(int i=0; i < pop->taillePopu; i++){
+                intermediaire[i] = i+1;
             }
+
+            for(int i=0; i < pop->taillePopu; i++){
+                permutation[i] = intermediaire[rand() % (pop->taillePopu - (i))];
+                retraitElemTab(&intermediaire,pop->taillePopu-(i),permutation[i]);
+            }
+            free(intermediaire);
+
+            for(int j=0; j<4; j++){
+                parentsSelect[j] = permutation[j];
+                //printf("%d ",directResultat(pop->solutions[parentsSelect[j]-1],instance));
+            }
+
+            //On sélectionne les 2 meilleurs parents
+            //printf("- MEILLEURS : ");
+            int valeursmax[2];
+            int resultat;
+            parents[0] = parentsSelect[0]-1;
+            parents[1] = parentsSelect[1]-1;
+            valeursmax[0] = 0;
+            valeursmax[1] = 0;
+            for(int j=0; j<4;j++){
+                resultat = directResultat(pop->solutions[parentsSelect[j]-1],instance);
+                if(resultat > valeursmax[0]){
+                    parents[0] = parentsSelect[j]-1;
+                    valeursmax[0] = resultat;
+                }
+            }
+            for(int j=0; j<4;j++){
+                resultat = directResultat(pop->solutions[parentsSelect[j]-1],instance);
+                if((resultat > valeursmax[1]) && (resultat < valeursmax[0])){
+                    parents[1] = parentsSelect[j]-1;
+                    valeursmax[1] = resultat;
+                }
+            }
+            //printf("%d %d\n",directResultat(pop->solutions[parents[0]],instance),directResultat(pop->solutions[parents[1]],instance));
+            //printf("%d %d\n",valeursmax[0],valeursmax[1]);
 
             //On créée des enfants
             int pointCroisement = rand() % instance->objetNb;
@@ -83,8 +119,8 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int valEnfant1,valEnfant2;
             valEnfant1 = directResultat(enfant1,instance);
             valEnfant2 = directResultat(enfant2,instance);
-            printf("-----------\n");
-            printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);
+            /*printf("-----------\n");
+            printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);*/
             //affSoluce(pop->solutions[parents[0]],instance->objetNb);
             //affSoluce(pop->solutions[parents[1]],instance->objetNb);
             //affSoluce(enfant1,instance->objetNb);
@@ -102,13 +138,14 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int tirageAleatoireMutation = rand() % 100 + 1; //On tire un nombre entre 1 et 100
             if(tirageAleatoireMutation < pMut){ //si le nombre tiré est inférieur à la proba de mutation, on mute l'enfant
                 mutationDirect(enfant->solutions[i],instance);
-                printf("mutationnnnnnnnnn\n");
+                //printf("mutationnnnnnnnnn\n");
                 if(resultat > fbest){
                     fbest = resultat;
                     memcpy(solutionBest,enfant->solutions[i],instance->objetNb*sizeof(int));
                 }
             }
         }
+        renouvellerDirect(pop,enfant,instance);
 
         nbIte++;
     }
@@ -126,8 +163,7 @@ void procreerDirect(int *parent1, int *parent2, int *enfant1, int *enfant2, Inst
     memcpy(enfant2,parent2,pointCroisement*sizeof(int));
     memcpy(enfant2+pointCroisement,parent1+pointCroisement,(instance->objetNb-pointCroisement)*sizeof(int));
 
-    int valEnfant1;
-    int valEnfant2;
+    //On teste si les solutions sont vérifiables, si ce n'est pas le cas on remet des 0 aléatoirement dans la solution
     while(directFaisable(enfant1,instance) == 0){
         enfant1[rand() % instance->objetNb] = 0;
     }
@@ -146,5 +182,13 @@ void mutationDirect(int *membre, Instance *instance){
     //On corrige la mutation si elle n'est pas faisable
     while(directFaisable(membre,instance) == 0){
         membre[rand() % instance->objetNb] = 0;
+    }
+}
+
+void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *instance){
+    for(int i=0;i<aEvoluer->taillePopu;i++){
+        if(directResultat(nouvelle->solutions[i],instance) > directResultat(aEvoluer->solutions[i],instance)){
+            memcpy(nouvelle->solutions[i],aEvoluer->solutions[i],instance->objetNb);
+        }
     }
 }
