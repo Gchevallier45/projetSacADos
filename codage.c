@@ -70,11 +70,11 @@ void writeSoluce(int solu){
 
 /** Décode une solution indirecte en solution directe
  * @param permutation un tableau de int contenant une permutation d'objets
- * @param nbPermutations la taille du tableau de permutations
  * @param solution le tableau dans lequel stocker la solution directe
  * @param instance l'instance correspondant à la permutation
  */
-void decode(int *permutation, int nbPermutations, int *solution, Instance *instance){
+void decode(int *permutation, int *solution, Instance *instance){
+    int nbPermutations = instance->objetNb;
     int dimensionNb = instance->dimensionNb;
     int *sommePoids = calloc(dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
     int *endpermut = permutation + nbPermutations;

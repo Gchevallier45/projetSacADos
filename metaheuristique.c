@@ -17,7 +17,7 @@ void metaLocalIndirecte(int* tab, Instance *instance){
     memcpy(solutionBestVoisine,solutionCourante,instance->objetNb*sizeof(int));
 
     //Calcul de fbest
-    decode(solutionCourante,instance->objetNb,solution,instance);
+    decode(solutionCourante,solution,instance);
     int fbest = directResultat(solution,instance);
     int continuer = 1;
     int fcourant = fbest;
@@ -35,7 +35,7 @@ void metaLocalIndirecte(int* tab, Instance *instance){
 
                 //Décodage et évaluation de la solution voisine
                 memset(solution,0,instance->objetNb*sizeof(int));
-                decode(solutionVoisine,instance->objetNb,solution,instance);
+                decode(solutionVoisine,solution,instance);
                 int resultat=directResultat(solution,instance);
                 if(resultat > fbestvoisin){
                     memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
@@ -62,7 +62,7 @@ void metaLocalIndirecte(int* tab, Instance *instance){
 
     //Copie de la solution dans le tableau de destination
     memset(solution,0,instance->objetNb*sizeof(int));
-    decode(solutionBest,instance->objetNb,solution,instance);
+    decode(solutionBest,solution,instance);
     memcpy(tab,solution,instance->objetNb*sizeof(int));
 
     free(solution);
@@ -184,7 +184,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     memcpy(solutionBestVoisine,solutionCourante,instance->objetNb*sizeof(int));
 
     //Calcul de fbest
-    decode(solutionCourante,instance->objetNb,solution,instance);
+    decode(solutionCourante,solution,instance);
     int fbest = directResultat(solution,instance);
     //int continuer = 1;
     int fcourant = fbest;
@@ -220,7 +220,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                     if(estTabou == 0){
                         //Décodage et évaluation de la solution voisine
                         memset(solution,0,instance->objetNb*sizeof(int));
-                        decode(solutionVoisine,instance->objetNb,solution,instance);
+                        decode(solutionVoisine,solution,instance);
                         int resultat=directResultat(solution,instance);
                         if(resultat > fbestvoisin && resultat != fbest && resultat != fcourant){
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
@@ -230,7 +230,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         }
                     }else{
                         memset(solution,0,instance->objetNb*sizeof(int));
-                        decode(solutionVoisine,instance->objetNb,solution,instance);
+                        decode(solutionVoisine,solution,instance);
                         int resultat=directResultat(solution,instance);
                         if(resultat > fbest && resultat != fbest && resultat != fcourant){
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
@@ -283,7 +283,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
 
     //Copie de la solution dans le tableau de destination
     memset(solution,0,instance->objetNb*sizeof(int));
-    decode(solutionBest,instance->objetNb,solution,instance);
+    decode(solutionBest,solution,instance);
     memcpy(tab,solution,instance->objetNb*sizeof(int));
 
     free(solution);
