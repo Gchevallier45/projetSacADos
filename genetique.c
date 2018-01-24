@@ -113,7 +113,6 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             //printf("%d %d\n",valeursmax[0],valeursmax[1]);
 
             //On créée des enfants
-            int pointCroisement = rand() % instance->objetNb;
             int *enfant1 = malloc(instance->objetNb*sizeof(int));
             int *enfant2 = malloc(instance->objetNb*sizeof(int));
             procreerDirect(pop->solutions[parents[0]],pop->solutions[parents[1]],enfant1,enfant2,instance);
@@ -225,6 +224,14 @@ void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *ins
     printf("--------------\n");*/
 }
 
+/*
+|||||||||||||||||||||||||||||||||||||||||||||||
+
+               PARTIE INDIRECTE
+
+|||||||||||||||||||||||||||||||||||||||||||||||
+*/
+
 /** Metaheuristique génétique indirect
  * @param tab le tableau dans lequel sera stocké la solution
  * @param instance l'instance à utiliser pour générer la solution
@@ -241,8 +248,8 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
     int fbest = 0;
     int indiceSolutionBest  = 0;
     for(int i=0;i<pop->taillePopu;i++){
-        //decode()
-        int val = directResultat(pop->solutions[i],instance);
+        decode(pop->solutions[i],solution,instance);
+        int val = directResultat(solution,instance);
         if(val > fbest){
             fbest = val;
             indiceSolutionBest = i;
@@ -250,6 +257,7 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
     }
 
     memcpy(solutionBest,pop->solutions[indiceSolutionBest],instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
+    //affSoluce(solutionBest,100);
 
     int nbIte = 0;
     while(nbIte < nbIteMax){
@@ -289,14 +297,16 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
             valeursmax[0] = 0;
             valeursmax[1] = 0;
             for(int j=0; j<4;j++){
-                resultat = directResultat(pop->solutions[parentsSelect[j]-1],instance);
+                decode(pop->solutions[parentsSelect[j]-1],solution,instance);
+                resultat = directResultat(solution,instance);
                 if(resultat > valeursmax[0]){
                     parents[0] = parentsSelect[j]-1;
                     valeursmax[0] = resultat;
                 }
             }
             for(int j=0; j<4;j++){
-                resultat = directResultat(pop->solutions[parentsSelect[j]-1],instance);
+                decode(pop->solutions[parentsSelect[j]-1],solution,instance);
+                resultat = directResultat(solution,instance);
                 if((resultat > valeursmax[1]) && (resultat < valeursmax[0])){
                     parents[1] = parentsSelect[j]-1;
                     valeursmax[1] = resultat;
@@ -306,10 +316,9 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
             //printf("%d %d\n",valeursmax[0],valeursmax[1]);
 
             //On créée des enfants
-            int pointCroisement = rand() % instance->objetNb;
             int *enfant1 = malloc(instance->objetNb*sizeof(int));
             int *enfant2 = malloc(instance->objetNb*sizeof(int));
-            procreerDirect(pop->solutions[parents[0]],pop->solutions[parents[1]],enfant1,enfant2,instance);
+            procreerIndirect(pop->solutions[parents[0]],pop->solutions[parents[1]],enfant1,enfant2,instance);
 
             //On ajoute les solution dans la pop enfant
             enfant->solutions[i*2] = enfant1;
@@ -353,4 +362,32 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
 
     detruirePopulation(pop);
     free(solutionBest);
+}
+
+/** Algo PMX**/
+void procreerIndirect(int *parent1, int *parent2, int *enfant1, int *enfant2, Instance *instance){
+    int pointCroisement1 = rand() % instance->objetNb;
+    int pointCroisement2;
+    do{
+        pointCroisement2 = rand() % instance->objetNb;
+    }
+    while(pointCroisement1 == pointCroisement2);
+
+    //On s'assure que le point de croisement 2 est toujours le deuxième point de coupure (donc > au pt 1)
+    if(pointCroisement1 > pointCroisement2){
+        int tmp = pointCroisement1;
+        pointCroisement1 = pointCroisement2;
+        pointCroisement2 = tmp;
+    }
+
+    memset(enfant1,0,100*sizeof(int));
+    memcpy(enfant1+pointCroisement1,parent2+pointCroisement1,(pointCroisement2-pointCroisement1)*sizeof(int));
+    memcpy(enfant2+pointCroisement1,parent1+pointCroisement1,(pointCroisement2-pointCroisement1)*sizeof(int));
+
+    printf("pt1 %d, pt2 %d\n",pointCroisement1,pointCroisement2);
+    affSoluce(enfant1,100);
+
+    /*memcpy(enfant1+pointCroisement,parent2+pointCroisement,(instance->objetNb-pointCroisement)*sizeof(int));
+    memcpy(enfant2,parent2,pointCroisement*sizeof(int));
+    memcpy(enfant2+pointCroisement,parent1+pointCroisement,(instance->objetNb-pointCroisement)*sizeof(int));*/
 }

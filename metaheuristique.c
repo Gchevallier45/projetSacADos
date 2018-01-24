@@ -163,9 +163,9 @@ void metaLocalDirecte(int* tab, Instance *instance){
  * @param instance l'instance à utiliser pour générer la solution
  * @param NbIteMax le nombre d'itérations maximum sans trouver une meilleure solution courante
  * @param TabouSize le nombre de solutions taboues
+ * @param aspi le critère d'aspiration (1 si on active le critère d'aspiration, 0 sinon)
  * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
  */
-
 void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
     int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage indirect
