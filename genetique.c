@@ -83,6 +83,8 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
                 //printf("%d ",directResultat(pop->solutions[parentsSelect[j]-1],instance));
             }
 
+            free(permutation);
+
             //On sélectionne les 2 meilleurs parents
             //printf("- MEILLEURS : ");
             int valeursmax[2];
@@ -114,12 +116,13 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int *enfant2 = malloc(instance->objetNb*sizeof(int));
             procreerDirect(pop->solutions[parents[0]],pop->solutions[parents[1]],enfant1,enfant2,instance);
 
+            //On ajoute les solution dans la pop enfant
             enfant->solutions[i*2] = enfant1;
             enfant->solutions[i*2+1] = enfant2;
-            int valEnfant1,valEnfant2;
+            /*int valEnfant1,valEnfant2;
             valEnfant1 = directResultat(enfant1,instance);
             valEnfant2 = directResultat(enfant2,instance);
-            /*printf("-----------\n");
+            printf("-----------\n");
             printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);*/
             //affSoluce(pop->solutions[parents[0]],instance->objetNb);
             //affSoluce(pop->solutions[parents[1]],instance->objetNb);
@@ -146,6 +149,7 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             }
         }
         renouvellerDirect(pop,enfant,instance);
+        detruirePopulation(enfant);
 
         nbIte++;
     }
@@ -186,9 +190,35 @@ void mutationDirect(int *membre, Instance *instance){
 }
 
 void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *instance){
+    int *zeros = malloc(instance->objetNb*sizeof(int));
+    memset(zeros,0,instance->objetNb*sizeof(int));
+
+    /*printf("ANCIEN \n");
     for(int i=0;i<aEvoluer->taillePopu;i++){
-        if(directResultat(nouvelle->solutions[i],instance) > directResultat(aEvoluer->solutions[i],instance)){
-            memcpy(nouvelle->solutions[i],aEvoluer->solutions[i],instance->objetNb);
+        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
+    }*/
+    /*printf("PROPOSITIONS \n");
+    for(int i=0;i<aEvoluer->taillePopu;i++){
+        printf("%d\n",directResultat(nouvelle->solutions[i],instance));
+    }*/
+
+    for(int i=0;i<aEvoluer->taillePopu;i++){
+        int jmax=-1;
+        for(int j=0;j<nouvelle->taillePopu;j++){
+            if(directResultat(nouvelle->solutions[j],instance) >= directResultat(aEvoluer->solutions[i],instance)){
+                jmax=j;
+                memcpy(aEvoluer->solutions[i],nouvelle->solutions[j],instance->objetNb*sizeof(int));
+            }
+        }
+        if(jmax>=0){
+            //printf("jmax : %d",jmax);
+            memcpy(nouvelle->solutions[jmax],zeros,instance->objetNb*sizeof(int));
         }
     }
+
+    /*printf("NOUVEAU \n");
+    for(int i=0;i<aEvoluer->taillePopu;i++){
+        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
+    }
+    printf("--------------\n");*/
 }

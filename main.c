@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     char dest[1024];
     strcpy(dest,p.filePath);
     //strcat(dest,"/_mknapcb1_res.txt");
-    printf("%s\n",dest);
+    //printf("%s\n",dest);
 
     FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     //FILE *file = fopen(dest,"r");
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
-        metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],1000,100,75);
+        metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],100,400,50);
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
