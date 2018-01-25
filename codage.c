@@ -78,33 +78,40 @@ void decode(int *permutation, int *solution, Instance *instance){
     int dimensionNb = instance->dimensionNb;
     int *sommePoids = calloc(dimensionNb,sizeof(int)); //La somme de valeurs pour chaque dimension
     int *endpermut = permutation + nbPermutations;
+    int *zeros = calloc(instance->objetNb,sizeof(int));
 
-    while(permutation < endpermut){
-        int j;
-        for(j=0; j<dimensionNb; j++){
-            sommePoids[j]+=instance->Rij[j][*permutation-1]; //Par défaut on considère que l'objet rentre dans le sac (permet de gagner un peu de temps)
-            if(sommePoids[j] > instance->Bi[j]){ //Si ce n'est pas le cas on l'enlève du sac
-                for(int k=0; k<=j; k++){
-                    sommePoids[k]-=instance->Rij[k][*permutation-1];
+    if(*permutation <= 0 || *permutation >= instance->objetNb){ //Si la permutation est incorrecte on renvoie une solution vide
+        memcpy(solution,zeros,instance->objetNb*sizeof(int));
+    }
+    else{
+        while(permutation < endpermut){
+            int j;
+            for(j=0; j<dimensionNb; j++){
+                sommePoids[j]+=instance->Rij[j][*permutation-1]; //Par défaut on considère que l'objet rentre dans le sac (permet de gagner un peu de temps)
+                if(sommePoids[j] > instance->Bi[j]){ //Si ce n'est pas le cas on l'enlève du sac
+                    for(int k=0; k<=j; k++){
+                        sommePoids[k]-=instance->Rij[k][*permutation-1];
+                    }
+                    break;
                 }
-                break;
             }
-        }
 
-        //Si l'objet rentre dans toutes les dimensions on met la case de l'objet à 1 dans la solution directe
-        if(j == dimensionNb){
-            solution[*permutation-1] = 1;
-        }
+            //Si l'objet rentre dans toutes les dimensions on met la case de l'objet à 1 dans la solution directe
+            if(j == dimensionNb){
+                solution[*permutation-1] = 1;
+            }
 
-        /*printf("\n");
-        printf("Solution 0 : %d, Max poids dim : %d\n", sommePoids[0], instance.Bi[0]);
-        printf("Solution 1 : %d, Max poids dim : %d\n", sommePoids[1], instance.Bi[1]);
-        printf("Solution 2 : %d, Max poids dim : %d\n", sommePoids[2], instance.Bi[2]);
-        printf("Solution 3 : %d, Max poids dim : %d\n", sommePoids[3], instance.Bi[3]);
-        printf("Solution 4 : %d, Max poids dim : %d\n", sommePoids[4], instance.Bi[4]);
-        printf("---------------------------------------------");*/
-        permutation++;
+            /*printf("\n");
+            printf("Solution 0 : %d, Max poids dim : %d\n", sommePoids[0], instance.Bi[0]);
+            printf("Solution 1 : %d, Max poids dim : %d\n", sommePoids[1], instance.Bi[1]);
+            printf("Solution 2 : %d, Max poids dim : %d\n", sommePoids[2], instance.Bi[2]);
+            printf("Solution 3 : %d, Max poids dim : %d\n", sommePoids[3], instance.Bi[3]);
+            printf("Solution 4 : %d, Max poids dim : %d\n", sommePoids[4], instance.Bi[4]);
+            printf("---------------------------------------------");*/
+            permutation++;
+        }
     }
     free(sommePoids);
+    free(zeros);
 }
 
