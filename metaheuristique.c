@@ -220,7 +220,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         memset(solution,0,instance->objetNb*sizeof(int));
                         decode(solutionVoisine,instance->objetNb,solution,instance);
                         int resultat=directResultat(solution,instance);
-                        if(resultat > fbestvoisin && resultat != fbest && resultat != fcourant){
+                        if(resultat > fbestvoisin ){//&& resultat != fbest && resultat != fcourant){
 
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
                             fbestvoisin = resultat;
@@ -231,7 +231,7 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
                         memset(solution,0,instance->objetNb*sizeof(int));
                         decode(solutionVoisine,instance->objetNb,solution,instance);
                         int resultat=directResultat(solution,instance);
-                        if(resultat > fbest && resultat != fbest && resultat != fcourant){
+                        if(resultat > fbest ){//&& resultat != fbest && resultat != fcourant){
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
                             //fbest = resultat;
                             fbestvoisin = resultat;
