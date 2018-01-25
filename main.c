@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     char dest[1024];
     strcpy(dest,p.filePath);
     //strcat(dest,"/_mknapcb1_res.txt");
-    printf("%s\n",dest);
+    //printf("%s\n",dest);
 
     FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
     //FILE *file = fopen(dest,"r");
@@ -46,13 +46,21 @@ int main(int argc, char *argv[])
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        //Direct(tabAlea,&grInstances->instances[i],3);
+        //Direct(tabAlea,&grInstances->instances[i],1);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
+<<<<<<< HEAD
         metaTabouIndirecte(tabAlea, &grInstances->instances[i], 1000, 5000, 1);
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
         //metaGenetiqueDirecte(tabAlea,&grInstances->instances[i],10,10,50);
+=======
+        //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 10, 10, 1);
+
+
+        //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
+        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,400,50);
+>>>>>>> ec0f5692e2f51a7078e3413c7c4c6fbc34bb53a0
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
