@@ -1,15 +1,30 @@
 #include "genetique.h"
 
+// --------------------------------------------------------------------------------------
+// Ce fichier contient toutes les fonctions en relation avec la métaheuristique génétique
+// --------------------------------------------------------------------------------------
+
+/** Initialise une population vide de type direct ou indirect
+ * @param population un pointeur de type Population, non initialisé
+ * @param taillePopulation la taille de la population
+ * @param typeSolutions type direct ou indirect
+ */
 void initPopulation(Population *population, int taillePopulation, int typeSolutions){
     population->taillePopu = taillePopulation;
     population->type = typeSolutions;
-    population->solutions = (int*)malloc(taillePopulation*sizeof(int*));
+    population->solutions = (int**)malloc(taillePopulation*sizeof(int*));
 }
 
+/** Initialise et génère une population de type direct ou indirect
+ * @param population un pointeur de type Population, non initialisé
+ * @param taillePopulation la taille de la population
+ * @param typeSolutions type direct ou indirect
+ * @param instance l'instance à utiliser pour générer la population
+ */
 void creerPopulation(Population *population, int taillePopulation, int typeSolutions, Instance *instance){
     population->taillePopu = taillePopulation;
     population->type = typeSolutions;
-    population->solutions = (int*)malloc(taillePopulation*sizeof(int*));
+    population->solutions = (int**)malloc(taillePopulation*sizeof(int*));
     if(typeSolutions == DIRECT){
         for(int i=0;i<taillePopulation;i++){
             int *solution = malloc(instance->objetNb*sizeof(int));
@@ -26,6 +41,9 @@ void creerPopulation(Population *population, int taillePopulation, int typeSolut
     }
 }
 
+/** Détruit une population
+ * @param population la population à détruire
+ */
 void detruirePopulation(Population *population){
     for(int i=0;i<population->taillePopu;i++){
         free(population->solutions[i]);
@@ -33,6 +51,16 @@ void detruirePopulation(Population *population){
     free(population->solutions);
     free(population);
 }
+
+
+/**
+|||||||||||||||||||||||||||||||||||||||||||||||
+
+               PARTIE DIRECTE
+
+|||||||||||||||||||||||||||||||||||||||||||||||
+**/
+
 
 /** Metaheuristique génétique direct
  * @param tab le tableau dans lequel sera stocké la solution
@@ -82,13 +110,11 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
 
             for(int j=0; j<4; j++){
                 parentsSelect[j] = permutation[j];
-                //printf("%d ",directResultat(pop->solutions[parentsSelect[j]-1],instance));
             }
 
             free(permutation);
 
             //On sélectionne les 2 meilleurs parents
-            //printf("- MEILLEURS : ");
             int valeursmax[2];
             int resultat;
             parents[0] = parentsSelect[0]-1;
@@ -109,8 +135,6 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
                     valeursmax[1] = resultat;
                 }
             }
-            //printf("%d %d\n",directResultat(pop->solutions[parents[0]],instance),directResultat(pop->solutions[parents[1]],instance));
-            //printf("%d %d\n",valeursmax[0],valeursmax[1]);
 
             //On créée des enfants
             int *enfant1 = malloc(instance->objetNb*sizeof(int));
@@ -120,17 +144,6 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             //On ajoute les solution dans la pop enfant
             enfant->solutions[i*2] = enfant1;
             enfant->solutions[i*2+1] = enfant2;
-            /*int valEnfant1,valEnfant2;
-            valEnfant1 = directResultat(enfant1,instance);
-            valEnfant2 = directResultat(enfant2,instance);
-            printf("-----------\n");
-            printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);*/
-            //affSoluce(pop->solutions[parents[0]],instance->objetNb);
-            //affSoluce(pop->solutions[parents[1]],instance->objetNb);
-            //affSoluce(enfant1,instance->objetNb);
-            //printf("point crois %d, deux copie %d, total %d\n\n",pointCroisement,instance->objetNb-pointCroisement,instance->objetNb-pointCroisement+pointCroisement);
-
-            //printf("PARENT 1 : %d, PARENT 2 : %d\n",parents[0],parents[1]);
         }
 
         for(int i=0;i<taillePopu;i++){
@@ -142,7 +155,6 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
             int tirageAleatoireMutation = rand() % 100 + 1; //On tire un nombre entre 1 et 100
             if(tirageAleatoireMutation < pMut){ //si le nombre tiré est inférieur à la proba de mutation, on mute l'enfant
                 mutationDirect(enfant->solutions[i],instance);
-                //printf("mutationnnnnnnnnn\n");
                 if(resultat > fbest){
                     fbest = resultat;
                     memcpy(solutionBest,enfant->solutions[i],instance->objetNb*sizeof(int));
@@ -161,6 +173,12 @@ void metaGenetiqueDirecte(int* tab, Instance *instance, int nbIteMax, int taille
     free(solutionBest);
 }
 
+/** Génère deux enfants au format direct à partir de deux parents donnés
+ * @param parent1, parent2 les parents à utiliser
+ * @param enfant1, enfant2 pointeurs dans lesquels seront stockés les 2 enfants
+ * @param instance l'instance associée aux deux parents
+ * Préconditions : parent1, parent2, enfant1 et enfant2 correctement initialisés
+ */
 void procreerDirect(int *parent1, int *parent2, int *enfant1, int *enfant2, Instance *instance){
     int pointCroisement = rand() % instance->objetNb;
     memcpy(enfant1,parent1,pointCroisement*sizeof(int));
@@ -177,6 +195,11 @@ void procreerDirect(int *parent1, int *parent2, int *enfant1, int *enfant2, Inst
     }
 }
 
+/** Mute un membre de la population au format direct
+ * @param membre le membre à muter
+ * @param instance l'instance associée au membre
+ * Préconditions : membre correctement initialisé
+ */
 void mutationDirect(int *membre, Instance *instance){
     //On mute l'enfant
     int randNb;
@@ -190,18 +213,15 @@ void mutationDirect(int *membre, Instance *instance){
     }
 }
 
+/** Renouvelle une population à partir d'une nouvelle population de façon à ne garder que les meilleurs membres des 2 populations
+ * @param aEvoluer la population à renouveller
+ * @param nouvelle la population à utiliser pour le renouvellement
+ * @param instance l'instance associée aux populations
+ * Préconditions : populations initialisées et non vides
+ */
 void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *instance){
     int *zeros = malloc(instance->objetNb*sizeof(int));
     memset(zeros,0,instance->objetNb*sizeof(int));
-
-    /*printf("ANCIEN \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
-    }*/
-    /*printf("PROPOSITIONS \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(nouvelle->solutions[i],instance));
-    }*/
 
     for(int i=0;i<aEvoluer->taillePopu;i++){
         int jmax=-1;
@@ -212,25 +232,20 @@ void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *ins
             }
         }
         if(jmax>=0){
-            //printf("jmax : %d",jmax);
             memcpy(nouvelle->solutions[jmax],zeros,instance->objetNb*sizeof(int));
         }
     }
-
-    /*printf("NOUVEAU \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
-    }
-    printf("--------------\n");*/
 }
 
-/*
+
+/**
 |||||||||||||||||||||||||||||||||||||||||||||||
 
                PARTIE INDIRECTE
 
 |||||||||||||||||||||||||||||||||||||||||||||||
-*/
+**/
+
 
 /** Metaheuristique génétique indirect
  * @param tab le tableau dans lequel sera stocké la solution
@@ -258,7 +273,6 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
     }
 
     memcpy(solutionBest,pop->solutions[indiceSolutionBest],instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
-    //affSoluce(solutionBest,100);
 
     int nbIte = 0;
     while(nbIte < nbIteMax){
@@ -284,13 +298,11 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
 
             for(int j=0; j<4; j++){
                 parentsSelect[j] = permutation[j];
-                //printf("%d ",directResultat(pop->solutions[parentsSelect[j]-1],instance));
             }
 
             free(permutation);
 
             //On sélectionne les 2 meilleurs parents
-            //printf("- MEILLEURS : ");
             int valeursmax[2];
             int resultat;
             parents[0] = parentsSelect[0]-1;
@@ -315,8 +327,6 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
                     valeursmax[1] = resultat;
                 }
             }
-            //printf("%d %d\n",directResultat(pop->solutions[parents[0]],instance),directResultat(pop->solutions[parents[1]],instance));
-            //printf("%d %d\n",valeursmax[0],valeursmax[1]);
 
             //On créée des enfants
             int *enfant1 = malloc(instance->objetNb*sizeof(int));
@@ -326,17 +336,6 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
             //On ajoute les solution dans la pop enfant
             enfant->solutions[i*2] = enfant1;
             enfant->solutions[i*2+1] = enfant2;
-            /*int valEnfant1,valEnfant2;
-            valEnfant1 = directResultat(enfant1,instance);
-            valEnfant2 = directResultat(enfant2,instance);
-            printf("-----------\n");
-            printf("val enfant 1 %d, val enfant 2 %d\n",valEnfant1,valEnfant2);*/
-            //affSoluce(pop->solutions[parents[0]],instance->objetNb);
-            //affSoluce(pop->solutions[parents[1]],instance->objetNb);
-            //affSoluce(enfant1,instance->objetNb);
-            //printf("point crois %d, deux copie %d, total %d\n\n",pointCroisement,instance->objetNb-pointCroisement,instance->objetNb-pointCroisement+pointCroisement);
-
-            //printf("PARENT 1 : %d, PARENT 2 : %d\n",parents[0],parents[1]);
         }
 
         for(int i=0;i<taillePopu;i++){
@@ -350,7 +349,6 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
             int tirageAleatoireMutation = rand() % 100 + 1; //On tire un nombre entre 1 et 100
             if(tirageAleatoireMutation < pMut){ //si le nombre tiré est inférieur à la proba de mutation, on mute l'enfant
                 mutationIndirect(enfant->solutions[i],instance);
-                //printf("mutationnnnnnnnnn\n");
                 if(resultat > fbest){
                     fbest = resultat;
                     memcpy(solutionBest,enfant->solutions[i],instance->objetNb*sizeof(int));
@@ -373,7 +371,12 @@ void metaGenetiqueIndirecte(int* tab, Instance *instance, int nbIteMax, int tail
     free(solution);
 }
 
-/** Algo PMX**/
+/** Génère deux enfants au format indirect à partir de deux parents donnés
+ * @param parent1, parent2 les parents à utiliser
+ * @param enfant1, enfant2 pointeurs dans lesquels seront stockés les 2 enfants
+ * @param instance l'instance associée aux deux parents
+ * Préconditions : parent1, parent2, enfant1 et enfant2 correctement initialisés
+ */
 void procreerIndirect(int *parent1, int *parent2, int *enfant1, int *enfant2, Instance *instance){
     int pointCroisement1 = rand() % instance->objetNb;
     int pointCroisement2;
@@ -389,14 +392,6 @@ void procreerIndirect(int *parent1, int *parent2, int *enfant1, int *enfant2, In
         pointCroisement2 = tmp;
     }
 
-    //||||||||||||||||||TESTS||||||||||||||||||||||
-    //pointCroisement1 = 3;
-    //pointCroisement2 = 7;
-    //int parent1[10] = {8,4,7,3,6,2,5,1,9,0};
-    //int parent2[10] = {0,1,2,3,4,5,6,7,8,9};
-    //instance->objetNb = 10;
-    //|||||||||||||||||||||||||||||||||||||||||||||
-
     memset(enfant1,0,instance->objetNb*sizeof(int));
     memset(enfant2,0,instance->objetNb*sizeof(int));
     memcpy(enfant1+pointCroisement1,parent1+pointCroisement1,(pointCroisement2-pointCroisement1+1)*sizeof(int));
@@ -405,33 +400,15 @@ void procreerIndirect(int *parent1, int *parent2, int *enfant1, int *enfant2, In
     PMX(parent1,parent2,enfant1,pointCroisement1,pointCroisement2,instance);
     PMX(parent2,parent1,enfant2,pointCroisement1,pointCroisement2,instance);
 
-    /*int enOrdre = 0;
-    int taille = 100;
-    while(enOrdre == 0)
-    {
-        enOrdre = 1;
-        for(int i=0 ; i < taille-1 ; i++)
-        {
-            if(enfant2[i] < enfant2[i+1])
-            {
-                int tmpVal = enfant2[i];
-                enfant2[i] = enfant2[i+1];
-                enfant2[i+1] = tmpVal;
-                enOrdre = 0;
-            }
-        }
-        taille--;
-    }*/
-
-    //printf("pt1 %d, pt2 %d\n",pointCroisement1,pointCroisement2);
-    //affSoluce(parent1,100);
-    //affSoluce(parent2,100);
-    //affSoluce(enfant2,100);
-    //printf("\n");
-    //affSoluce(diffValeurs,nbValeurs);
-
 }
 
+/** Algorithme PMX pour créer un enfant en solution indirecte à partir de 2 parents
+ * @param parent1, parent2 les parents à utiliser
+ * @param enfant pointeur sur la solution enfant
+ * @param pointCroisement1, pointCroisement2 les points de croisements à utiliser
+ * @param instance l'instance associée aux deux parents
+ * Préconditions : parent1, parent2, enfant1 et enfant2 correctement initialisés
+**/
 void PMX(int *parent1, int *parent2, int *enfant, int pointCroisement1, int pointCroisement2, Instance *instance){
     //On cherche les valeurs qui différent dans parent1 et parent2 entre les deux points de croisement
     int *diffValeurs, nbValeurs=0;
@@ -454,7 +431,7 @@ void PMX(int *parent1, int *parent2, int *enfant, int pointCroisement1, int poin
 
     //Pour chaque valeur qui diffère on calcule l'endroit où la placer pour ne pas avoir d'objets en double dans la solution enfant
     for(int i=0;i<nbValeurs;i++){
-        int indiceValeur, objetAChercher = diffValeurs[i];
+        int indiceValeur=0, objetAChercher = diffValeurs[i];
         do{
             for(int j=0;j<instance->objetNb;j++){
                 if(objetAChercher == parent2[j]){
@@ -478,6 +455,11 @@ void PMX(int *parent1, int *parent2, int *enfant, int pointCroisement1, int poin
     free(diffValeurs);
 }
 
+/** Mute un membre de la population au format indirect
+ * @param membre le membre à muter
+ * @param instance l'instance associée au membre
+ * Préconditions : membre correctement initialisé
+ */
 void mutationIndirect(int *membre, Instance *instance){
     //On tire au hasard deux indices du tableau à échanger
     int indice1 = rand() % instance->objetNb;
@@ -494,18 +476,15 @@ void mutationIndirect(int *membre, Instance *instance){
     membre[indice2] = tmp;
 }
 
+/** Renouvelle une population à partir d'une nouvelle population de façon à ne garder que les meilleurs membres des 2 populations
+ * @param aEvoluer la population à renouveller
+ * @param nouvelle la population à utiliser pour le renouvellement
+ * @param instance l'instance associée aux populations
+ * Préconditions : populations initialisées et non vides
+ */
 void renouvellerIndirect(Population *aEvoluer, Population *nouvelle, Instance *instance){
     int *zeros = malloc(instance->objetNb*sizeof(int));
     memset(zeros,0,instance->objetNb*sizeof(int));
-
-    /*printf("ANCIEN \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
-    }*/
-    /*printf("PROPOSITIONS \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(nouvelle->solutions[i],instance));
-    }*/
 
     int *aEvoluerDirect = calloc(instance->objetNb,sizeof(int));
     int *nouvelleDirect = calloc(instance->objetNb,sizeof(int));
@@ -523,7 +502,6 @@ void renouvellerIndirect(Population *aEvoluer, Population *nouvelle, Instance *i
             }
         }
         if(jmax>=0){
-            //printf("jmax : %d",jmax);
             memcpy(nouvelle->solutions[jmax],zeros,instance->objetNb*sizeof(int));
         }
     }
@@ -531,9 +509,4 @@ void renouvellerIndirect(Population *aEvoluer, Population *nouvelle, Instance *i
     free(aEvoluerDirect);
     free(nouvelleDirect);
     free(zeros);
-    /*printf("NOUVEAU \n");
-    for(int i=0;i<aEvoluer->taillePopu;i++){
-        printf("%d\n",directResultat(aEvoluer->solutions[i],instance));
-    }
-    printf("--------------\n");*/
 }
