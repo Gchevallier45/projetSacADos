@@ -158,8 +158,7 @@ void metaLocalDirecte(int* tab, Instance *instance){
     free(solutionBestVoisine);
 }
 
-/** Metaheuristique tabou indirecte avec une différence dans les conditions de permutations afin de toujours trouver une solution différente que la dernière, qu'elle soit meilleure ou non
- * l'idée étant de forcer plusieurs permutations qui permettront de possiblement mieux arranger les objets et trouver une meilleure solution grâce à de multiples permutations
+/** Metaheuristique tabou indirecte
  * @param tab le tableau dans lequel sera stocké la solution
  * @param instance l'instance à utiliser pour générer la solution
  * @param NbIteMax le nombre d'itérations maximum sans trouver une meilleure solution courante
@@ -564,15 +563,6 @@ void metaTabouDirecte(int* tab, Instance *instance, int nbIteMax, int aspi, int 
             listeMouvements[nbIte%nbMouvements][0]=mouvementUtil[0];
             listeMouvements[nbIte%nbMouvements][1]=mouvementUtil[1];
         }
-
-        /*printf("%d\n",nbMouvements);
-        printf("%d %d\n",mouvementUtil[0],mouvementUtil[1]);
-        printf("est tabou ? %d\n",estTabou);
-        affSoluce(solutionCourante,instance->objetNb);
-        printf("%d\n",directResultat(solutionCourante,instance));
-        for (int i=0; i<nbMouvements;i++)
-            affSoluce(listeMouvements[i],2);
-        printf("-----\n");*/
 
         if(fcourant>fbest){
             fbest=fcourant;

@@ -23,6 +23,42 @@ int main2(){
     return 0;
 }
 
+void benchValgrind(Instance *instance){
+    int *tabAlea = (int*)malloc((instance->objetNb) * sizeof(int));
+    printf("test valgrind... |");
+    printf("0%%---");
+    fflush(stdout);
+    for(int i=1;i<=6;i++){
+        if(i!=5){
+            Direct(tabAlea,instance,i);
+            if(i!=6)
+                Indirect(tabAlea,instance,i);
+        }
+    }
+    printf("5%%---");
+    fflush(stdout);
+    metaLocalDirecte(tabAlea,instance);
+    printf("10%%---");
+    fflush(stdout);
+    metaLocalIndirecte(tabAlea,instance);
+    printf("20%%---");
+    fflush(stdout);
+    metaTabouDirecte(tabAlea,instance,30,1,10);
+    printf("30%%---");
+    fflush(stdout);
+    metaTabouIndirecte(tabAlea,instance,30,10,1);
+    printf("40%%---");
+    fflush(stdout);
+    metaGenetiqueDirecte(tabAlea,instance,10,50,50);
+    printf("60%%---");
+    fflush(stdout);
+    metaGenetiqueIndirecte(tabAlea,instance,10,50,50);
+    printf("100%%|");
+    fflush(stdout);
+    free(tabAlea);
+    printf("\n");
+}
+
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
@@ -70,7 +106,7 @@ int main(int argc, char *argv[])
         Direct(tabAlea,&grInstances->instances[i],1);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
 
-        metaTabouIndirecte(tabAlea, &grInstances->instances[i], 1000, 65, 1);
+        //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 10, 35, 1);
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
@@ -98,40 +134,4 @@ int main(int argc, char *argv[])
     InstanceTableau_videDetruire(grInstances);
 
     return 0;
-}
-
-void benchValgrind(Instance *instance){
-    int *tabAlea = (int*)malloc((instance->objetNb) * sizeof(int));
-    printf("test valgrind... |");
-    printf("0%%---");
-    fflush(stdout);
-    for(int i=1;i<=6;i++){
-        if(i!=5){
-            Direct(tabAlea,instance,i);
-            if(i!=6)
-                Indirect(tabAlea,instance,i);
-        }
-    }
-    printf("5%%---");
-    fflush(stdout);
-    metaLocalDirecte(tabAlea,instance);
-    printf("10%%---");
-    fflush(stdout);
-    metaLocalIndirecte(tabAlea,instance);
-    printf("20%%---");
-    fflush(stdout);
-    metaTabouDirecte(tabAlea,instance,30,1,10);
-    printf("30%%---");
-    fflush(stdout);
-    metaTabouIndirecte(tabAlea,instance,30,10,1);
-    printf("40%%---");
-    fflush(stdout);
-    metaGenetiqueDirecte(tabAlea,instance,10,50,50);
-    printf("60%%---");
-    fflush(stdout);
-    metaGenetiqueIndirecte(tabAlea,instance,10,50,50);
-    printf("100%%|");
-    fflush(stdout);
-    free(tabAlea);
-    printf("\n");
 }
