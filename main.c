@@ -102,11 +102,11 @@ void benchValgrind(Instance *instance){
     printf("test valgrind... |");
     printf("0%%---");
     fflush(stdout);
-    for(int i=0;i<6;i++){
-        if(i!=4){
-            Direct(tabAlea,instance,i+1);
-            if(i!=5)
-                Indirect(tabAlea,instance,i+1);
+    for(int i=1;i<=6;i++){
+        if(i!=5){
+            Direct(tabAlea,instance,i);
+            if(i!=6)
+                Indirect(tabAlea,instance,i);
         }
     }
     printf("5%%---");
