@@ -41,8 +41,6 @@ double timer_getTime(time_t timer){
 
     double timeElapsed;
     timeElapsed = (clock()-timer)/(double)CLOCKS_PER_SEC;
-    //printf("time elapsed : %d %d %f\n",clock(),timer,timeElapsed);
-    //timeFile(timeElapsed,1);
 
     return timeElapsed;
 }

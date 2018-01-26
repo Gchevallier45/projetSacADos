@@ -323,7 +323,6 @@ void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int 
     //Calcul de fbest
     decode(solutionCourante,solution,instance);
     int fbest = directResultat(solution,instance);
-    //int continuer = 1;
     int fcourant = fbest;
 
     int k = 0; //compteur dans l'emplacement tabou
@@ -333,7 +332,6 @@ void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int 
     int tabouTampon[2];
     tabouTampon[0] = -1;
     tabouTampon[1] = -1;
-    //int meilleur = 0;
 
     while(nbIte < nbIteMax){
 
