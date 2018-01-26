@@ -12,10 +12,11 @@ void retraitElemTab(int ** tabElem, int tabTaille, int elem){
         tmpElem++;
 
     int i=tmpElem-*tabElem;
-    for(i; i<tabTaille-1; i++){
+    /*for(i; i<tabTaille-1; i++){
         *tmpElem = *(tmpElem+1);
         tmpElem++;
-    }
+    }*/
+    memcpy(tmpElem,tmpElem+1,(tabTaille-1-i)*sizeof(int));
 
     *tabElem = realloc(*tabElem, sizeof(int)*(tabTaille-1));
 }
@@ -277,7 +278,7 @@ void Indirect(int* tab, Instance *instance, int typeOrdonnancement){
         break;
     }
 
-    decode(solutionInd,instance->objetNb,tab,instance);
+    decode(solutionInd,tab,instance);
     free(solutionInd);
 }
 

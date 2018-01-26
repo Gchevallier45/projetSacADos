@@ -235,6 +235,7 @@ void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *ins
             memcpy(nouvelle->solutions[jmax],zeros,instance->objetNb*sizeof(int));
         }
     }
+    free(zeros);
 }
 
 
@@ -410,39 +411,47 @@ void procreerIndirect(int *parent1, int *parent2, int *enfant1, int *enfant2, In
  * Préconditions : parent1, parent2, enfant1 et enfant2 correctement initialisés
 **/
 void PMX(int *parent1, int *parent2, int *enfant, int pointCroisement1, int pointCroisement2, Instance *instance){
-    //On cherche les valeurs qui différent dans parent1 et parent2 entre les deux points de croisement
-    int *diffValeurs, nbValeurs=0;
-    diffValeurs = malloc(0);
-    for(int i=pointCroisement1;i<pointCroisement2+1;i++){
-        int trouve=0;
-        for(int j=pointCroisement1;j<pointCroisement2+1;j++){
-            if(parent2[i]==parent1[j]){
-                trouve=1;
-                break;
-            }
-        }
 
-        if(trouve == 0){
-            nbValeurs++;
-            diffValeurs = realloc(diffValeurs,nbValeurs*sizeof(int));
-            diffValeurs[nbValeurs-1]=parent2[i];
-        }
-    }
-
-    //Pour chaque valeur qui diffère on calcule l'endroit où la placer pour ne pas avoir d'objets en double dans la solution enfant
-    for(int i=0;i<nbValeurs;i++){
-        int indiceValeur=0, objetAChercher = diffValeurs[i];
-        do{
-            for(int j=0;j<instance->objetNb;j++){
-                if(objetAChercher == parent2[j]){
-                    indiceValeur = j;
-                    objetAChercher = parent1[j];
+    /* On regarde d'abord si les éléments de parent1 et parent2 sont identiques entre les points de croisement
+       Si c'est le cas, on a pas besoin d'exécuter toutes les étapes de l'algo PMX, la permutation peut être faite directement
+    */
+    if(memcmp(enfant+pointCroisement1,parent2+pointCroisement1,(pointCroisement2-pointCroisement1+1)*sizeof(int)) != 0){
+        //On cherche les valeurs qui différent dans parent1 et parent2 entre les deux points de croisement
+        int *diffValeurs, nbValeurs=0;
+        diffValeurs = malloc(0);
+        for(int i=pointCroisement1;i<pointCroisement2+1;i++){
+            int trouve=0;
+            for(int j=pointCroisement1;j<pointCroisement2+1;j++){
+                if(parent2[i]==parent1[j]){
+                    trouve=1;
                     break;
                 }
             }
+
+            if(trouve == 0){
+                nbValeurs++;
+                diffValeurs = realloc(diffValeurs,nbValeurs*sizeof(int));
+                diffValeurs[nbValeurs-1]=parent2[i];
+            }
         }
-        while(indiceValeur>=pointCroisement1 && indiceValeur<=pointCroisement2);
-        enfant[indiceValeur] = diffValeurs[i];
+
+        //Pour chaque valeur qui diffère on calcule l'endroit où la placer pour ne pas avoir d'objets en double dans la solution enfant
+        for(int i=0;i<nbValeurs;i++){
+            int indiceValeur=0, objetAChercher = diffValeurs[i];
+            do{
+                for(int j=0;j<instance->objetNb;j++){
+                    if(objetAChercher == parent2[j]){
+                        indiceValeur = j;
+                        objetAChercher = parent1[j];
+                        break;
+                    }
+                }
+            }
+            while(indiceValeur>=pointCroisement1 && indiceValeur<=pointCroisement2);
+            enfant[indiceValeur] = diffValeurs[i];
+        }
+
+        free(diffValeurs);
     }
 
     //On construit le reste de la solution en copiant les objets de la solution parent2 dans la solution enfant
@@ -452,7 +461,7 @@ void PMX(int *parent1, int *parent2, int *enfant, int pointCroisement1, int poin
         }
     }
 
-    free(diffValeurs);
+
 }
 
 /** Mute un membre de la population au format indirect

@@ -3,6 +3,25 @@
 #include "codage.h"
 #include "heuristique.h"
 #include "metaheuristique.h"
+#include "genetique.h"
+
+//Opti pour déplacer tableau (c'est des tests pour l'algo génétique)
+int main2(){
+    int *tab = malloc(2048*sizeof(int));
+    for(int i=0;i<2048;i++)
+        tab[i] = i;
+    for(int k=0;k<100000;k++){
+                for(int j=0;j<100000;j++){
+                        /*for(int i=0;i<2047;i++){
+                                tab[i]=tab[i+1];
+    }*/
+    memmove(tab,tab+1,2047*sizeof(int));
+    }
+    printf("%d\n",k);
+    //affSoluce(tab,2048);
+    }
+    return 0;
+}
 
 int main(int argc, char *argv[])
 {
@@ -40,13 +59,15 @@ int main(int argc, char *argv[])
         testtab[i] = 1;
     printf("RESULTAT : %d",directFaisable(grInstances->instances[0].Xj,&grInstances->instances[0]));*/
 
+    benchValgrind(&grInstances->instances[0]);
+
     double moyennePourcentage = 0;
     printf("INSTANCE | TEMPS CALCUL | %% SOLUTION | SOLUTION | SOLUTION MAX \n");
     for(int i=0; i<grInstances->instancesNb; i++){
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        //Direct(tabAlea,&grInstances->instances[i],1);
+        Direct(tabAlea,&grInstances->instances[i],1);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
 
         metaTabouIndirecte(tabAlea, &grInstances->instances[i], 1000, 65, 1);
@@ -54,12 +75,17 @@ int main(int argc, char *argv[])
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
 
-        //metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],20,30,50);
+        //metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,30,50);
 
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
-        printf("   %f   |   %.2f%%   |  %d   |   %d     \n",timer_getTime(time1000),100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
+
+        double time = timer_getTime(time1000);
+
+        printf("   %f   |   %.2f%%   |  %d   |   %d     \n",time,100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
+        timeFile(i+1,resultat,time);
+
         free(tabAlea);
         moyennePourcentage += 100*(resultat/(double)grInstances->instances[i].sol1);
 
@@ -72,4 +98,40 @@ int main(int argc, char *argv[])
     InstanceTableau_videDetruire(grInstances);
 
     return 0;
+}
+
+void benchValgrind(Instance *instance){
+    int *tabAlea = (int*)malloc((instance->objetNb) * sizeof(int));
+    printf("test valgrind... |");
+    printf("0%%---");
+    fflush(stdout);
+    for(int i=1;i<=6;i++){
+        if(i!=5){
+            Direct(tabAlea,instance,i);
+            if(i!=6)
+                Indirect(tabAlea,instance,i);
+        }
+    }
+    printf("5%%---");
+    fflush(stdout);
+    metaLocalDirecte(tabAlea,instance);
+    printf("10%%---");
+    fflush(stdout);
+    metaLocalIndirecte(tabAlea,instance);
+    printf("20%%---");
+    fflush(stdout);
+    metaTabouDirecte(tabAlea,instance,30,1,10);
+    printf("30%%---");
+    fflush(stdout);
+    metaTabouIndirecte(tabAlea,instance,30,10,1);
+    printf("40%%---");
+    fflush(stdout);
+    metaGenetiqueDirecte(tabAlea,instance,10,50,50);
+    printf("60%%---");
+    fflush(stdout);
+    metaGenetiqueIndirecte(tabAlea,instance,10,50,50);
+    printf("100%%|");
+    fflush(stdout);
+    free(tabAlea);
+    printf("\n");
 }

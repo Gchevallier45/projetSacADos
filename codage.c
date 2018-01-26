@@ -52,10 +52,11 @@ void affSoluce(int* solution, int nbObjets){
     printf("\n");
 }
 
-/** Ecrit une solution dans un fichier de sortir
- * @param solu la valeur de la solution à écrire
+/** Ecrit une solution dans un fichier de sortie
+ * @param solution un tableau de int contenant une solution
+ * @param nbObjets la taille du tableau de la solution
  */
-void writeSoluce(int solu){
+void writeSoluce(int* solution, int nbObjets){
     FILE * fichier = NULL;
     fichier = fopen("sortie.txt","a");
 
@@ -64,7 +65,11 @@ void writeSoluce(int solu){
         exit(0);
     }
 
-    fprintf(fichier," %d\n",solu);
+    //fprintf(fichier," %d\n",solu);
+    fprintf(fichier,"|");
+    for(int i=0;i<nbObjets;i++)
+        fprintf(fichier,"%d|",solution[i]);
+    fprintf(fichier,"\n");
     fclose(fichier);
 }
 

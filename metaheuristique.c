@@ -330,6 +330,8 @@ void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int 
     int estTabou;
     int nbIte = 0;
     int tabouTampon[2];
+    tabouTampon[0] = -1;
+    tabouTampon[1] = -1;
     //int meilleur = 0;
 
     while(nbIte < nbIteMax){

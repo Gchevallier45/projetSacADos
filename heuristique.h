@@ -5,6 +5,7 @@
 #include <time.h>
 #include <math.h>
 #include "instance.h"
+#include "codage.h"
 
 /** Supprime un élément d'un tableau
  * @param tabElem l'adresse d'un tableau de int contenant les objets du sac

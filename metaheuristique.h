@@ -3,6 +3,7 @@
 
 #include "instance.h"
 #include "codage.h"
+#include "heuristique.h"
 
 /** Metaheuristique locale indirecte
  * @param tab le tableau dans lequel sera stocké la solution
