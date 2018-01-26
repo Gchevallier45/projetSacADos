@@ -49,16 +49,13 @@ int main(int argc, char *argv[])
         //Direct(tabAlea,&grInstances->instances[i],1);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
 
-        //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 10, 10, 1);
+        metaTabouIndirecte(tabAlea, &grInstances->instances[i], 1000, 65, 1);
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
-<<<<<<< HEAD
-        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,400,50);
 
-=======
-        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],20,30,50);
->>>>>>> 840cad98b457f0b86316fe980f0b72b4b465fb86
+        //metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],20,30,50);
+
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);

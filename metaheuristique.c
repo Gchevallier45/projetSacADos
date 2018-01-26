@@ -190,7 +190,6 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int fcourant = fbest;
 
     int k = 0; //compteur dans l'emplacement tabou
-    int p;
     int estTabou;
     int nbIte = 0;
     int tabouTampon[2];
@@ -204,8 +203,8 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
             for(int j=i+1;j<instance->objetNb;j++){ //j=i+1 car les permutations de 0 à i+1 ont déjà été effectuées dans les itérations d'avant
 
                 estTabou = 0;
-                for(p = 0; p < tabouSize; p++){
-                    if(solutionVoisine[i] == tabou[p]){
+                for(int p = 0; p < tabouSize; p++){
+                    if(solutionVoisine[i] == tabou[p] || solutionVoisine[j] == tabou[p]){ //on regarde les 2 objets que l'on va permuter pour voir s'il s'agit d'un mouvement tabou
                         estTabou = 1;
                         break;
                     }
@@ -254,20 +253,17 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
         }
         //comparaison de la solutioncourante avec bestsolutionvoisine et regarde l'élément qui a changé
 
-        tabou[k] = tabouTampon[0];
-        if (k >= tabouSize){} //si la liste de tabou est remplie on recommence à le remplir du début
-            k = 0;
-            tabou[k] = tabouTampon[0];
-        }else{
-            tabou[k] = tabouTampon[0];
+
+        for(int p = 0; p < 2; p++){
+
             k++;
-        }
-        if (k >= tabouSize){} //si la liste de tabou est remplie on recommence à le remplir du début
-            k = 0;
-            tabou[k] = tabouTampon[1];
-        }else{
-            tabou[k] = tabouTampon[1];
-            k++;
+            if (k >= tabouSize){ //si la liste de tabou est remplie on recommence à le remplir du début
+                k = 0;
+                tabou[k] = tabouTampon[p];
+            }else{
+                tabou[k] = tabouTampon[p];
+            }
+
         }
 
         fcourant = fbestvoisin;
