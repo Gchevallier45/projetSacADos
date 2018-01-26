@@ -6,13 +6,19 @@
 #include <string.h>
 #include "timer.h"
 
+#define CODAGEDIRECT 1
+#define CODAGEINDIRECT 2
+#define HEURISTIQUE 1
+#define METAHEURISTIQUE 2
+
 /** Structure qui stocke les paramètres lors de l'appel du programme
  */
-typedef struct _Parameters{
-    char* filePath;
-    char* code;
-    char* method;
-} Parameters;
+typedef struct _Parametres{
+    char* cheminFichier;
+    int codage;
+    int methode;
+    int paramMethode;
+} Parametres;
 
 /** Structure qui stocke les données d'une instance d'un problème
  */

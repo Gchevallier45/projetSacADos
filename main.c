@@ -5,23 +5,12 @@
 #include "metaheuristique.h"
 #include "genetique.h"
 
-//Opti pour déplacer tableau (c'est des tests pour l'algo génétique)
-int main2(){
-    int *tab = malloc(2048*sizeof(int));
-    for(int i=0;i<2048;i++)
-        tab[i] = i;
-    for(int k=0;k<100000;k++){
-                for(int j=0;j<100000;j++){
-                        /*for(int i=0;i<2047;i++){
-                                tab[i]=tab[i+1];
-    }*/
-    memmove(tab,tab+1,2047*sizeof(int));
-    }
-    printf("%d\n",k);
-    //affSoluce(tab,2048);
-    }
-    return 0;
-}
+/* DEFINITION DES PARAMETRES A PASSER AU PROGRAMME
+    1 : chemin du fichier
+    2 : type de codage (1 pour direct, 2 pour indirect)
+    3 : type de méthode de résolution (1 pour heuristique, 2 pour métaheuristique)
+    4 : paramètre de la méthode de résolution (type d'heuristique ou de metaheuristique)
+*/
 
 void benchValgrind(Instance *instance){
     int *tabAlea = (int*)malloc((instance->objetNb) * sizeof(int));
@@ -59,27 +48,56 @@ void benchValgrind(Instance *instance){
     printf("\n");
 }
 
+void interface(Parametres param, int *solution, Instance *instance){
+    if(param.methode == HEURISTIQUE){ //Heuristiques
+        if(param.codage == CODAGEDIRECT)
+            Direct(solution,instance,param.paramMethode);
+        else if(param.codage == CODAGEINDIRECT)
+            Indirect(solution,instance,param.paramMethode);
+    }
+    else if(param.methode == METAHEURISTIQUE){ // Metaheuristiques
+        switch(param.paramMethode){
+            case 1: //Metaheuristique locale
+                if(param.codage == CODAGEDIRECT)
+                    metaLocalDirecte(solution,instance);
+                else if(param.codage == CODAGEINDIRECT)
+                    metaLocalIndirecte(solution,instance);
+                break;
+            case 2: //Metaheuristique tabou
+                if(param.codage == CODAGEDIRECT)
+                    metaTabouDirecte(solution,instance,100,1,100);
+                else if(param.codage == CODAGEINDIRECT)
+                    metaTabouIndirecte(solution,instance,100,100,1);
+                break;
+            case 3: //Metaheuristique genetique
+                if(param.codage == CODAGEDIRECT)
+                    metaGenetiqueDirecte(solution,instance,100,30,50);
+                else if(param.codage == CODAGEINDIRECT)
+                    metaGenetiqueIndirecte(solution,instance,100,30,50);
+                break;
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
-    //core(argc,argv);
 
-    Parameters p;
-    p.filePath = argv[1];
-    p.code = argv[2];
-    p.method = argv[3];
+    Parametres p;
+    p.cheminFichier = argv[1];
+    p.codage = atoi(argv[2]);
+    p.methode = atoi(argv[3]);
+    p.paramMethode = atoi(argv[4]);
 
-    printf("Filepath : %s \n",p.filePath);
-    printf("Code : %s \n",p.code);
-    printf("Method : %s \n",p.method);
+    printf("Chemin du fichier : %s \n",p.cheminFichier);
+    printf("Type de codage : %d \n",p.codage);
+    printf("Méthode : %d \n",p.methode);
+    printf("Paramètres de la méthode : %d \n",p.paramMethode);
 
     char dest[1024];
-    strcpy(dest,p.filePath);
-    //strcat(dest,"/_mknapcb1_res.txt");
-    //printf("%s\n",dest);
+    strcpy(dest,p.cheminFichier);
 
-    FILE *file = fopen("/home/etudiant/Desktop/MKP-Instances/_mknapcb1_res.txt","r");
-    //FILE *file = fopen(dest,"r");
+    FILE *file = fopen(dest,"r");
     InstanceTableau *grInstances = InstanceTableau_initCreer();
 
     if(file != NULL){
@@ -90,11 +108,6 @@ int main(int argc, char *argv[])
         printf("FATAL ERROR : FILE NOT FOUND\n");
     }
 
-    /*int *testtab = malloc(100*sizeof(int));
-    for(int i=0; i<100;i++)
-        testtab[i] = 1;
-    printf("RESULTAT : %d",directFaisable(grInstances->instances[0].Xj,&grInstances->instances[0]));*/
-
     benchValgrind(&grInstances->instances[0]);
 
     double moyennePourcentage = 0;
@@ -103,17 +116,8 @@ int main(int argc, char *argv[])
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        Direct(tabAlea,&grInstances->instances[i],1);
-        //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
 
-        //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 10, 35, 1);
-
-
-        //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
-
-        //metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,30,50);
-
-        //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
+        interface(p,tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
 
@@ -124,13 +128,9 @@ int main(int argc, char *argv[])
 
         free(tabAlea);
         moyennePourcentage += 100*(resultat/(double)grInstances->instances[i].sol1);
-
-        //i=grInstances->instancesNb;
     }
     printf("\n              | QUALITE SOLUTIONS --> %.2f%% |\n\n",moyennePourcentage/grInstances->instancesNb);
 
-    /*affSoluce(grInstances->instances[0].sol1);
-    writeSoluce(grInstances->instances[0].sol1);*/
     InstanceTableau_videDetruire(grInstances);
 
     return 0;

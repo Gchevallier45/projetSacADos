@@ -309,7 +309,7 @@ void Direct(int* tab, Instance *instance, int typeOrdonnancement){
         decRatioValPoidsCritPick(solutionInd, instance->objetNb, instance, NULL);
         break;
     case 5:
-        //Stratégie d'ordonnancement à développer
+        ratioValMoyPoids(solutionInd, instance->objetNb, instance);
         break;
     case 6: //Ratio valeur/poids mis à jour
         decRatioValPoidsCritPick(solutionInd, instance->objetNb, instance, NULL);
