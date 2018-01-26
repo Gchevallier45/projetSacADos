@@ -27,7 +27,7 @@ int directFaisable(int* solutionBinaire, Instance *instance);
  */
 void affSoluce(int* solution, int nbObjets);
 
-/** Ecrit une solution dans un fichier de sortir
+/** Ecrit une solution dans un fichier de sortie
  * @param solution un tableau de int contenant une solution
  * @param nbObjets la taille du tableau de la solution
  */

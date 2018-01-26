@@ -3,6 +3,7 @@
 #include "codage.h"
 #include "heuristique.h"
 #include "metaheuristique.h"
+#include "genetique.h"
 
 //Opti pour déplacer tableau (c'est des tests pour l'algo génétique)
 int main2(){
@@ -19,6 +20,7 @@ int main2(){
     printf("%d\n",k);
     //affSoluce(tab,2048);
     }
+    return 0;
 }
 
 int main(int argc, char *argv[])

@@ -52,7 +52,7 @@ void affSoluce(int* solution, int nbObjets){
     printf("\n");
 }
 
-/** Ecrit une solution dans un fichier de sortir
+/** Ecrit une solution dans un fichier de sortie
  * @param solution un tableau de int contenant une solution
  * @param nbObjets la taille du tableau de la solution
  */
