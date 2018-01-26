@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
         time_t time1000 = timer_start();
         printf("   %.2d    |",i+1);
         int *tabAlea = (int*)malloc((grInstances->instances[i].objetNb) * sizeof(int));
-        Direct(tabAlea,&grInstances->instances[i],1);
+        Direct(tabAlea,&grInstances->instances[i],3);
         //metaLocalIndirecte(tabAlea,&grInstances->instances[i]);
 
         //metaTabouIndirecte(tabAlea, &grInstances->instances[i], 10, 35, 1);
