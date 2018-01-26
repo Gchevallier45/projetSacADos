@@ -182,6 +182,72 @@ void decRatioValPoidsCritPick(int* tab, int tailleTab, Instance *instance, int *
     free(ratios);
 }
 
+/** Remplit un tableau avec une permutation d'objets en fonction du ratio valeur/(moyennePoids + ecartType) de chaque objet
+ * @param tab le tableau dans lequel sera stocké la permutation
+ * @param instance l'instance à utiliser pour générer la permutation
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de la permutation
+ */
+void ratioValMoyPoids(int* tab, int tailleTab, Instance *instance){
+
+    double * ratios = (double*)malloc( (tailleTab) * sizeof(double));
+    double moyCourante = 0;
+    double varianceCourante = 0;
+    double moyET[instance->objetNb][2] ; //stock du poids moyen et de l'ecart type des objets
+
+
+    for(int i = 0; i < instance->objetNb; i++){
+
+        for(int j = 0; j<instance->dimensionNb; j++){
+            moyCourante += instance->Rij[i][j];     //calcul de la somme des poids de chaque dimension de l'objet
+        }
+
+        moyET[i][0] = moyCourante/instance->dimensionNb; //division pour passer à la moyenne
+
+        for(int j = 0; j<instance->dimensionNb; j++){
+            varianceCourante += (instance->Rij[i][j] - moyCourante) * (instance->Rij[i][j] - moyCourante); //calcul de la variance sans la division
+        }
+        varianceCourante = varianceCourante/instance->dimensionNb;      //division de la variance
+        moyET[i][1] = sqrt(varianceCourante);       //passage de variance à ecart type
+
+        moyCourante = 0;
+        varianceCourante = 0;
+    }
+
+    for(int i=0; i < tailleTab; i++){
+        tab[i] = i+1;   //Numérotation de chaque objet de l'instance
+    }
+
+
+    for(int i=0; i < tailleTab; i++){
+        ratios[i] = instance->Pj[tab[i]-1]/(moyET[i][0] + moyET[i][1]);
+    }
+
+    //Tri à bulle
+    int enOrdre = 0;
+    int taille = tailleTab;
+    while(enOrdre == 0)
+    {
+        enOrdre = 1;
+        for(int i=0 ; i < taille-1 ; i++)
+        {
+            if(ratios[i] < ratios[i+1])
+            {
+                double tmpVal = ratios[i];
+                ratios[i] = ratios[i+1];
+                ratios[i+1] = tmpVal;
+                tmpVal = tab[i];
+                tab[i] = tab[i+1];
+                tab[i+1] = tmpVal;
+                enOrdre = 0;
+            }
+        }
+        taille--;
+    }
+
+    free(ratios);
+
+}
+
 /** Heuristique indirecte
  * @param tab le tableau dans lequel sera stocké la permutation
  * @param instance l'instance à utiliser pour générer la permutation

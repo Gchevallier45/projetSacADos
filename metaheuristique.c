@@ -158,7 +158,8 @@ void metaLocalDirecte(int* tab, Instance *instance){
     free(solutionBestVoisine);
 }
 
-/** Metaheuristique tabou indirecte
+/** Metaheuristique tabou indirecte avec une différence dans les conditions de permutations afin de toujours trouver une solution différente que la dernière, qu'elle soit meilleure ou non
+ * l'idée étant de forcer plusieurs permutations qui permettront de possiblement mieux arranger les objets et trouver une meilleure solution grâce à de multiples permutations
  * @param tab le tableau dans lequel sera stocké la solution
  * @param instance l'instance à utiliser pour générer la solution
  * @param NbIteMax le nombre d'itérations maximum sans trouver une meilleure solution courante
@@ -166,7 +167,8 @@ void metaLocalDirecte(int* tab, Instance *instance){
  * @param aspi le critère d'aspiration (1 si on active le critère d'aspiration, 0 sinon)
  * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
  */
-void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
+void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
+
     int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage indirect
     int *solutionVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
@@ -263,23 +265,13 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
         memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
 
         if(fcourant>fbest){
-            //meilleur++;
             fbest=fcourant;
             memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
             nbIte = 0;
         }
-        /*else if(fcourant<=fprec){
-            continuer = 0;
-        }*/
-
         nbIte++;
     }
-    //printf("\nChangement %d fois de solution\n",meilleur);
-    //printf("\n");
-    //printf("nombre de solution exploré : %d",nbSoluce);
-    /*for(int i = 0; i< tabouSize; i++){
-        printf("%d| %d| \n",tabou[i][0],tabou[i][1]);
-    }*/
+
 
 
     //Copie de la solution dans le tableau de destination

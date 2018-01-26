@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "instance.h"
 
 /** Supprime un élément d'un tableau
