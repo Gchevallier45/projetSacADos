@@ -199,13 +199,13 @@ void ratioValMoyPoids(int* tab, int tailleTab, Instance *instance){
     for(int i = 0; i < instance->objetNb; i++){
 
         for(int j = 0; j<instance->dimensionNb; j++){
-            moyCourante += instance->Rij[i][j];     //calcul de la somme des poids de chaque dimension de l'objet
+            moyCourante += instance->Rij[j][i];     //calcul de la somme des poids de chaque dimension de l'objet
         }
 
         moyET[i][0] = moyCourante/instance->dimensionNb; //division pour passer à la moyenne
 
         for(int j = 0; j<instance->dimensionNb; j++){
-            varianceCourante += (instance->Rij[i][j] - moyCourante) * (instance->Rij[i][j] - moyCourante); //calcul de la variance sans la division
+            varianceCourante += (instance->Rij[j][i] - moyCourante) * (instance->Rij[j][i] - moyCourante); //calcul de la variance sans la division
         }
         varianceCourante = varianceCourante/instance->dimensionNb;      //division de la variance
         moyET[i][1] = sqrt(varianceCourante);       //passage de variance à ecart type
@@ -274,7 +274,8 @@ void Indirect(int* tab, Instance *instance, int typeOrdonnancement){
         decRatioValPoidsCritPick(solutionInd, instance->objetNb, instance, NULL);
         break;
     case 5:
-        //Stratégie d'ordonnancement à développer
+        //Stratégie d'ordonnancement personnel
+        ratioValMoyPoids(solutionInd,  instance->objetNb, instance);
         break;
     }
 
@@ -309,7 +310,8 @@ void Direct(int* tab, Instance *instance, int typeOrdonnancement){
         decRatioValPoidsCritPick(solutionInd, instance->objetNb, instance, NULL);
         break;
     case 5:
-        ratioValMoyPoids(solutionInd, instance->objetNb, instance);
+        //Stratégie d'ordonnancement personnel
+        ratioValMoyPoids(solutionInd,  instance->objetNb, instance);
         break;
     case 6: //Ratio valeur/poids mis à jour
         decRatioValPoidsCritPick(solutionInd, instance->objetNb, instance, NULL);
