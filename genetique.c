@@ -235,6 +235,7 @@ void renouvellerDirect(Population *aEvoluer, Population *nouvelle, Instance *ins
             memcpy(nouvelle->solutions[jmax],zeros,instance->objetNb*sizeof(int));
         }
     }
+    free(zeros);
 }
 
 
