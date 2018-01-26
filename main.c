@@ -53,8 +53,12 @@ int main(int argc, char *argv[])
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
+<<<<<<< HEAD
         metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,400,50);
 
+=======
+        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],20,30,50);
+>>>>>>> 840cad98b457f0b86316fe980f0b72b4b465fb86
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);

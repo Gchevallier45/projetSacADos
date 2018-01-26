@@ -167,6 +167,144 @@ void metaLocalDirecte(int* tab, Instance *instance){
  * @param aspi le critère d'aspiration (1 si on active le critère d'aspiration, 0 sinon)
  * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
  */
+void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
+
+    int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+    int *solutionBest = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+    int *solutionVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+    int *solutionBestVoisine = malloc(instance->objetNb*sizeof(int)); //En codage indirect
+    int *solution = calloc(instance->objetNb,sizeof(int)); //En codage direct
+
+    int tabou[tabouSize];
+    for(int i = 0; i<tabouSize;i++){
+        tabou[i] = 0;
+    }
+    //randPick(solutionCourante, instance);
+    decRatioValPoidsPick(solutionCourante, instance); //On génère la solution de départ avec l'algo d'ordonnancement le + performant
+    memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int)); //Copie de solutionCourante dans solutionBest
+    memcpy(solutionBestVoisine,solutionCourante,instance->objetNb*sizeof(int));
+
+    //Calcul de fbest
+    decode(solutionCourante,solution,instance);
+    int fbest = directResultat(solution,instance);
+    int fcourant = fbest;
+
+    int k = 0; //compteur dans l'emplacement tabou
+    int p;
+    int estTabou;
+    int nbIte = 0;
+    int tabouTampon[2];
+
+
+    while(nbIte < nbIteMax){
+
+        memcpy(solutionVoisine,solutionCourante,instance->objetNb*sizeof(int));
+        int fbestvoisin = 0;
+        for(int i=0;i<instance->objetNb/2;i++){
+            for(int j=i+1;j<instance->objetNb;j++){ //j=i+1 car les permutations de 0 à i+1 ont déjà été effectuées dans les itérations d'avant
+
+                estTabou = 0;
+                for(p = 0; p < tabouSize; p++){
+                    if(solutionVoisine[i] == tabou[p]){
+                        estTabou = 1;
+                        break;
+                    }
+                }
+
+                if(estTabou == 0 || aspi == 1){
+                    //Permutation des éléments
+                    int tmp = solutionVoisine[i];
+                    solutionVoisine[i] = solutionVoisine[j];
+                    solutionVoisine[j] = tmp;
+
+                    if(estTabou == 0){
+                        //Décodage et évaluation de la solution voisine
+                        memset(solution,0,instance->objetNb*sizeof(int));
+                        decode(solutionVoisine,solution,instance);
+                        int resultat=directResultat(solution,instance);
+                        if(resultat > fbestvoisin ){
+
+                            memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
+                            fbestvoisin = resultat;
+                            tabouTampon[0] = solutionVoisine[i];
+                            tabouTampon[1] = solutionVoisine[j];
+                        }
+                    }else{
+                        memset(solution,0,instance->objetNb*sizeof(int));
+                        decode(solutionVoisine,solution,instance);
+                        int resultat=directResultat(solution,instance);
+                        if(resultat > fbest ){
+                            memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
+                            //fbest = resultat;
+                            fbestvoisin = resultat;
+                            tabouTampon[0] = solutionVoisine[i];
+                            tabouTampon[1] = solutionVoisine[j];
+
+                        }
+
+                    }
+
+                    //Dépermutation des éléments pour restaurer la solutionCourante
+                    tmp = solutionVoisine[i];
+                    solutionVoisine[i] = solutionVoisine[j];
+                    solutionVoisine[j] = tmp;
+
+                }
+            }
+        }
+        //comparaison de la solutioncourante avec bestsolutionvoisine et regarde l'élément qui a changé
+
+        tabou[k] = tabouTampon[0];
+        if (k >= tabouSize){} //si la liste de tabou est remplie on recommence à le remplir du début
+            k = 0;
+            tabou[k] = tabouTampon[0];
+        }else{
+            tabou[k] = tabouTampon[0];
+            k++;
+        }
+        if (k >= tabouSize){} //si la liste de tabou est remplie on recommence à le remplir du début
+            k = 0;
+            tabou[k] = tabouTampon[1];
+        }else{
+            tabou[k] = tabouTampon[1];
+            k++;
+        }
+
+        fcourant = fbestvoisin;
+        memcpy(solutionCourante,solutionBestVoisine,instance->objetNb*sizeof(int));
+
+        if(fcourant>fbest){
+            fbest=fcourant;
+            memcpy(solutionBest,solutionCourante,instance->objetNb*sizeof(int));
+            nbIte = 0;
+        }
+        nbIte++;
+    }
+
+
+
+    //Copie de la solution dans le tableau de destination
+    memset(solution,0,instance->objetNb*sizeof(int));
+    decode(solutionBest,solution,instance);
+    memcpy(tab,solution,instance->objetNb*sizeof(int));
+
+    free(solution);
+    free(solutionCourante);
+    free(solutionBest);
+    free(solutionVoisine);
+    free(solutionBestVoisine);
+
+}
+
+/** Metaheuristique tabou indirecte avec une différence dans les conditions de permutations afin de toujours trouver une solution différente de celles encore en mémoire, qu'elle soit
+ *  meilleure ou non l'idée étant de forcer plusieurs permutations qui permettront de possiblement mieux arranger les objets et trouver une meilleure solution grâce à de multiples permutations
+ * @param tab le tableau dans lequel sera stocké la solution
+ * @param instance l'instance à utiliser pour générer la solution
+ * @param NbIteMax le nombre d'itérations maximum sans trouver une meilleure solution courante
+ * @param TabouSize le nombre de solutions taboues
+ * @param aspi le critère d'aspiration (1 si on active le critère d'aspiration, 0 sinon)
+ * Préconditions : tab non nul, et d'une taille correspondant au nombre d'objets de l'instance
+ */
 void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSize, int aspi){
 
     int *solutionCourante = malloc(instance->objetNb*sizeof(int)); //En codage indirect
@@ -235,7 +373,7 @@ void varianteMetaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int 
                         memset(solution,0,instance->objetNb*sizeof(int));
                         decode(solutionVoisine,solution,instance);
                         int resultat=directResultat(solution,instance);
-                        if(resultat > fbest ){//&& resultat != fbest && resultat != fcourant){
+                        if(resultat > fbest && resultat != fbest && resultat != fcourant){
                             memcpy(solutionBestVoisine,solutionVoisine,instance->objetNb*sizeof(int));
                             //fbest = resultat;
                             fbestvoisin = resultat;
