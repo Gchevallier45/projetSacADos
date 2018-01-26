@@ -12,6 +12,9 @@
     4 : paramètre de la méthode de résolution (type d'heuristique ou de metaheuristique)
 */
 
+/** Fonction de test pour Valgrind
+ * Permet de lancer tout nos algorithmes pour tester les fuites mémoires
+ */
 void benchValgrind(Instance *instance){
     int *tabAlea = (int*)malloc((instance->objetNb) * sizeof(int));
     printf("test valgrind... |");
@@ -32,22 +35,27 @@ void benchValgrind(Instance *instance){
     metaLocalIndirecte(tabAlea,instance);
     printf("20%%---");
     fflush(stdout);
-    metaTabouDirecte(tabAlea,instance,30,1,10);
+    metaTabouDirecte(tabAlea,instance,20,1,10);
     printf("30%%---");
     fflush(stdout);
-    metaTabouIndirecte(tabAlea,instance,30,10,1);
+    metaTabouIndirecte(tabAlea,instance,20,10,1);
     printf("40%%---");
     fflush(stdout);
-    metaGenetiqueDirecte(tabAlea,instance,10,50,50);
+    metaGenetiqueDirecte(tabAlea,instance,10,20,50);
     printf("60%%---");
     fflush(stdout);
-    metaGenetiqueIndirecte(tabAlea,instance,10,50,50);
+    metaGenetiqueIndirecte(tabAlea,instance,10,20,50);
     printf("100%%|");
     fflush(stdout);
     free(tabAlea);
     printf("\n");
 }
 
+/** Interface pour les paramètres et les méthodes de calcul
+ * @param param la structure contenant les paramètres passés au programme
+ * @param solution le tableau dans lequel stocker la solution
+ * @param instance l'instance correspondant au problème à traiter
+ */
 void interface(Parametres param, int *solution, Instance *instance){
     if(param.methode == HEURISTIQUE){ //Heuristiques
         if(param.codage == CODAGEDIRECT)
@@ -71,9 +79,9 @@ void interface(Parametres param, int *solution, Instance *instance){
                 break;
             case 3: //Metaheuristique genetique
                 if(param.codage == CODAGEDIRECT)
-                    metaGenetiqueDirecte(solution,instance,100,30,50);
+                    metaGenetiqueDirecte(solution,instance,100,300,50);
                 else if(param.codage == CODAGEINDIRECT)
-                    metaGenetiqueIndirecte(solution,instance,100,30,50);
+                    metaGenetiqueIndirecte(solution,instance,100,300,50);
                 break;
         }
     }

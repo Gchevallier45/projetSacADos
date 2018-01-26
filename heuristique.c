@@ -279,6 +279,7 @@ void Indirect(int* tab, Instance *instance, int typeOrdonnancement){
         break;
     }
 
+    //affSoluce(solutionInd,100);
     decode(solutionInd,tab,instance);
     free(solutionInd);
 }

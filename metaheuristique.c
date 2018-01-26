@@ -192,6 +192,8 @@ void metaTabouIndirecte(int* tab, Instance *instance, int nbIteMax, int tabouSiz
     int estTabou;
     int nbIte = 0;
     int tabouTampon[2];
+    tabouTampon[0] = -1;
+    tabouTampon[1] = -1;
 
 
     while(nbIte < nbIteMax){

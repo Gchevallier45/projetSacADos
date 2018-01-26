@@ -85,7 +85,7 @@ void decode(int *permutation, int *solution, Instance *instance){
     int *endpermut = permutation + nbPermutations;
     int *zeros = calloc(instance->objetNb,sizeof(int));
 
-    if(*permutation <= 0 || *permutation >= instance->objetNb){ //Si la permutation est incorrecte on renvoie une solution vide
+    if(*permutation <= 0 || *permutation > instance->objetNb){ //Si la permutation est incorrecte on renvoie une solution vide
         memcpy(solution,zeros,instance->objetNb*sizeof(int));
     }
     else{
