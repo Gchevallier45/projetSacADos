@@ -28,9 +28,10 @@ int directFaisable(int* solutionBinaire, Instance *instance);
 void affSoluce(int* solution, int nbObjets);
 
 /** Ecrit une solution dans un fichier de sortir
- * @param solu la valeur de la solution à écrire
+ * @param solution un tableau de int contenant une solution
+ * @param nbObjets la taille du tableau de la solution
  */
-void writeSoluce(int solu);
+void writeSoluce(int* solution, int nbObjets);
 
 /** Décode une solution indirecte en solution directe
  * @param permutation un tableau de int contenant une permutation d'objets

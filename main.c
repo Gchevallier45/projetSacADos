@@ -4,6 +4,23 @@
 #include "heuristique.h"
 #include "metaheuristique.h"
 
+//Opti pour déplacer tableau (c'est des tests pour l'algo génétique)
+int main2(){
+    int *tab = malloc(2048*sizeof(int));
+    for(int i=0;i<2048;i++)
+        tab[i] = i;
+    for(int k=0;k<100000;k++){
+                for(int j=0;j<100000;j++){
+                        /*for(int i=0;i<2047;i++){
+                                tab[i]=tab[i+1];
+    }*/
+    memmove(tab,tab+1,2047*sizeof(int));
+    }
+    printf("%d\n",k);
+    //affSoluce(tab,2048);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
@@ -52,11 +69,16 @@ int main(int argc, char *argv[])
 
 
         //metaTabouDirecte(tabAlea,&grInstances->instances[i],75,1,75);
-        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],20,30,50);
+        metaGenetiqueIndirecte(tabAlea,&grInstances->instances[i],100,30,50);
         //metaLocalDirecte(tabAlea,&grInstances->instances[i]);
 
         int resultat = directResultat(tabAlea,&grInstances->instances[i]);
-        printf("   %f   |   %.2f%%   |  %d   |   %d     \n",timer_getTime(time1000),100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
+
+        double time = timer_getTime(time1000);
+
+        printf("   %f   |   %.2f%%   |  %d   |   %d     \n",time,100*(resultat/(double)grInstances->instances[i].sol1),resultat,grInstances->instances[i].sol1);
+        timeFile(i+1,resultat,time);
+
         free(tabAlea);
         moyennePourcentage += 100*(resultat/(double)grInstances->instances[i].sol1);
 
